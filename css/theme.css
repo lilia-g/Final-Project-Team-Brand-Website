@@ -1,0 +1,272 @@
+/* ========================================
+   KICKSTART THEME SYSTEM
+   ======================================== */
+
+/* CSS Custom Properties for Theme System */
+:root {
+  /* Primary Orange Color Palette */
+  --primary-orange: #FF5800;
+  --primary-orange-light: #FF7A33;
+  --primary-orange-dark: #E64D00;
+  --primary-orange-darker: #CC4400;
+  
+  /* Orange Shades for Accents */
+  --orange-50: #fff7f3;
+  --orange-100: #ffede0;
+  --orange-200: #ffd6b8;
+  --orange-300: #ffb885;
+  --orange-400: #ff9a52;
+  --orange-500: #FF5800;
+  --orange-600: #E64D00;
+  --orange-700: #CC4400;
+  --orange-800: #B33A00;
+  --orange-900: #993000;
+  
+  /* Neutral Colors */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  /* Light Mode Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --border-color: #e5e7eb;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-color-strong: rgba(0, 0, 0, 0.15);
+  
+  /* Navigation Light Mode */
+  --nav-bg: rgba(255, 255, 255, 0.85);
+  --nav-bg-scrolled: rgba(255, 255, 255, 0.95);
+  --nav-text: #111827;
+  --nav-text-hover: var(--primary-orange);
+  --nav-border: rgba(0, 0, 0, 0.1);
+  --nav-shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Dark Mode Colors */
+  --dark-bg-primary: #1a1a1a;
+  --dark-bg-secondary: #2d2d2d;
+  --dark-bg-tertiary: #404040;
+  --dark-text-primary: #ffffff;
+  --dark-text-secondary: #d1d1d1;
+  --dark-text-tertiary: #a3a3a3;
+  --dark-border-color: #404040;
+  --dark-shadow-color: rgba(0, 0, 0, 0.4);
+  --dark-shadow-color-strong: rgba(0, 0, 0, 0.6);
+  
+  /* Navigation Dark Mode */
+  --dark-nav-bg: rgba(26, 26, 26, 0.8);
+  --dark-nav-bg-scrolled: rgba(26, 26, 26, 0.95);
+  --dark-nav-text: #ffffff;
+  --dark-nav-text-hover: var(--primary-orange);
+  --dark-nav-border: rgba(255, 255, 255, 0.1);
+  --dark-nav-shadow: rgba(0, 0, 0, 0.4);
+  
+  /* Typography */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-logo: 'Heavitas', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal: 1040;
+  --z-popover: 1050;
+  --z-tooltip: 1060;
+}
+
+/* ========================================
+   LIGHT MODE (Default)
+   ======================================== */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+body.dark-mode {
+  --bg-primary: var(--dark-bg-primary);
+  --bg-secondary: var(--dark-bg-secondary);
+  --bg-tertiary: var(--dark-bg-tertiary);
+  --text-primary: var(--dark-text-primary);
+  --text-secondary: var(--dark-text-secondary);
+  --text-tertiary: var(--dark-text-tertiary);
+  --border-color: var(--dark-border-color);
+  --shadow-color: var(--dark-shadow-color);
+  --shadow-color-strong: var(--dark-shadow-color-strong);
+  
+  /* Navigation Dark Mode */
+  --nav-bg: var(--dark-nav-bg);
+  --nav-bg-scrolled: var(--dark-nav-bg-scrolled);
+  --nav-text: var(--dark-nav-text);
+  --nav-text-hover: var(--dark-nav-text-hover);
+  --nav-border: var(--dark-nav-border);
+  --nav-shadow: var(--dark-nav-shadow);
+  
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Text Colors */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-orange { color: var(--primary-orange); }
+
+/* Background Colors */
+.bg-primary { background-color: var(--bg-primary); }
+.bg-secondary { background-color: var(--bg-secondary); }
+.bg-orange { background-color: var(--primary-orange); }
+.bg-orange-light { background-color: var(--primary-orange-light); }
+
+/* Border Colors */
+.border-primary { border-color: var(--border-color); }
+.border-orange { border-color: var(--primary-orange); }
+
+/* Shadow Utilities */
+.shadow-sm { box-shadow: 0 1px 2px var(--shadow-color); }
+.shadow-md { box-shadow: 0 4px 6px var(--shadow-color); }
+.shadow-lg { box-shadow: 0 10px 15px var(--shadow-color); }
+.shadow-xl { box-shadow: 0 20px 25px var(--shadow-color-strong); }
+
+/* ========================================
+   COMPONENT THEMES
+   ======================================== */
+
+/* Button Themes */
+.btn-primary {
+  background-color: var(--primary-orange);
+  color: var(--white);
+  border: none;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-orange-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary-orange);
+  border: 2px solid var(--primary-orange);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-orange);
+  color: var(--white);
+}
+
+/* Card Themes */
+.card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Input Themes */
+.input {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-primary);
+  transition: all var(--transition-normal);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-orange);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 768px) {
+  :root {
+    --space-4: 0.75rem;
+    --space-6: 1rem;
+    --space-8: 1.5rem;
+  }
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-fade-in { animation: fadeIn 0.3s ease; }
+.animate-slide-in { animation: slideIn 0.3s ease; }
