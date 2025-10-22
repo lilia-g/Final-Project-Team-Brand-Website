@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About KickStart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>About KickStart</h1>
+    <p>Your Sport Journey Begins Here</p>
+  </header>
+
+  <section class="mission">
+    <h2>Our Mission</h2>
+    <p>At KickStart, our mission is to inspire every individual to embrace an active lifestyle. Whether you’re a beginner or a pro athlete, we believe the right gear can spark your passion and push your limits.</p>
+  </section>
+
+  <section class="story">
+    <h2>Our Story</h2>
+    <p>KickStart began as a small idea between three fitness enthusiasts who wanted to make sports accessible to everyone. What started as a passion for helping friends find the best gear has grown into a platform that connects athletes worldwide with quality equipment and motivation.</p>
+  </section>
+
+  <section class="values">
+    <h2>Our Values</h2>
+    <ul>
+      <li><b>Performance:</b> Every product is chosen to help you perform your best.</li>
+      <li><b>Passion:</b> We live and breathe sports — it’s more than a business, it’s a lifestyle.</li>
+      <li><b>Community:</b> We believe in supporting athletes and empowering local talents.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>© 2025 KickStart. All rights reserved.</p>
+  </footer>
+</body>
+</html>
