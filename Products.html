@@ -63,9 +63,101 @@
     </nav>
    
   </header>
-  <main class="hero section">
-   
-        <p>Hello World</p>    
+  <main class="products-main">
+    <!-- Page Header -->
+    <section class="products-header">
+      <div class="products-header-container">
+        <h1 class="products-title">Our Products</h1>
+        <p class="products-subtitle">Discover our premium collection of fitness and sports equipment</p>
+      </div>
+    </section>
+
+    <!-- Filters and Search Section -->
+    <section class="products-filters">
+      <div class="filters-container">
+        <div class="filters-row">
+          <!-- Search Bar -->
+          <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search products..." class="search-input">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </div>
+
+          <!-- Category Filter -->
+          <select id="categoryFilter" class="filter-select">
+            <option value="">All Categories</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Footwear">Footwear</option>
+            <option value="Gym & Fitness Gear">Gym & Fitness Gear</option>
+            <option value="Sports Equipment">Sports Equipment</option>
+          </select>
+
+          <!-- Subcategory Filter -->
+          <select id="subcategoryFilter" class="filter-select">
+            <option value="">All Subcategories</option>
+          </select>
+
+          <!-- Gender Filter -->
+          <select id="genderFilter" class="filter-select">
+            <option value="">All Gender</option>
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Both">Both</option>
+          </select>
+
+          <!-- Price Filter -->
+          <select id="priceFilter" class="filter-select">
+            <option value="">All Prices</option>
+            <option value="0-50">$0 - $50</option>
+            <option value="50-100">$50 - $100</option>
+            <option value="100-200">$100 - $200</option>
+            <option value="200+">$200+</option>
+          </select>
+
+          <!-- Sort Filter -->
+          <select id="sortFilter" class="filter-select">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Count -->
+    <div class="products-count-section">
+      <div class="products-count-container">
+        <span id="productsCount" class="products-count-text">0 products</span>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <section class="products-grid-section">
+      <div class="products-grid-container">
+        <div id="productsGrid" class="products-grid">
+          <!-- Products will be dynamically loaded here -->
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+          <div class="loading-spinner"></div>
+          <p>Loading products...</p>
+        </div>
+
+        <!-- No Products State -->
+        <div id="noProductsState" class="no-products-state" style="display: none;">
+          <svg class="no-products-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          <h3>No products found</h3>
+          <p>Try adjusting your filters or search terms</p>
+        </div>
+      </div>
+    </section>
   </main>
     
 
@@ -170,8 +262,245 @@
     <script src="js/light-mode-toggle.js"></script>
   <script src="js/main.js"></script>
   
-  <!-- Footer Scroll to Top Script -->
-  <script>
+  <!-- Products Page Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA4U5Yd3tVKYs-bH6cEoXPy3doKromm1hU",
+      authDomain: "test1-ef56d.firebaseapp.com",
+      projectId: "test1-ef56d",
+      storageBucket: "test1-ef56d.firebasestorage.app",
+      messagingSenderId: "767603614507",
+      appId: "1:767603614507:web:4ee8e36ec3e963a1089b6e",
+      measurementId: "G-DVFHE3KH98"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Subcategories mapping
+    const subcategories = {
+      "Clothing": ["T-shirts", "Shorts", "Track Pants", "Hoodies", "Jackets", "Leggings", "Sports Bras", "Tops", "Tank Tops", "Sweatshirts", "Tracksuits", "Sports Shirts", "Polo Shirts", "Athletic Shorts", "Boxing Gloves", "Gloves"],
+      "Footwear": ["Running Shoes", "Training Shoes", "Football Boots", "Basketball Shoes", "Hiking Boots", "Sneakers"],
+      "Gym & Fitness Gear": ["Dumbbells", "Kettlebells", "Barbells", "Weight Plates", "Medicine Balls", "Resistance Bands", "Yoga Mats", "Jump Ropes", "Gym Bags", "Foam Rollers"],
+      "Sports Equipment": ["Footballs", "Basketballs", "Volleyballs", "Tennis Rackets", "Badminton Rackets", "Shuttlecocks", "Skipping Ropes"]
+    };
+
+    let allProducts = [];
+    let filteredProducts = [];
+
+    // DOM Elements
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const subcategoryFilter = document.getElementById('subcategoryFilter');
+    const genderFilter = document.getElementById('genderFilter');
+    const priceFilter = document.getElementById('priceFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const productsGrid = document.getElementById('productsGrid');
+    const productsCount = document.getElementById('productsCount');
+    const loadingState = document.getElementById('loadingState');
+    const noProductsState = document.getElementById('noProductsState');
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadProducts();
+      setupEventListeners();
+      updateSubcategories();
+    });
+
+    // Load products from Firebase
+    async function loadProducts() {
+      try {
+        loadingState.style.display = 'block';
+        productsGrid.style.display = 'none';
+        noProductsState.style.display = 'none';
+
+        const productsRef = collection(db, "products");
+        const q = query(productsRef, orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        
+        allProducts = [];
+        querySnapshot.forEach((doc) => {
+          allProducts.push({ id: doc.id, ...doc.data() });
+        });
+
+        filteredProducts = [...allProducts];
+        displayProducts();
+        updateProductsCount();
+        
+        loadingState.style.display = 'none';
+        productsGrid.style.display = 'grid';
+      } catch (error) {
+        console.error("Error loading products:", error);
+        loadingState.style.display = 'none';
+        noProductsState.style.display = 'block';
+      }
+    }
+
+    // Display products in grid
+    function displayProducts() {
+      if (filteredProducts.length === 0) {
+        productsGrid.style.display = 'none';
+        noProductsState.style.display = 'block';
+        return;
+      }
+
+      productsGrid.style.display = 'grid';
+      noProductsState.style.display = 'none';
+
+      productsGrid.innerHTML = filteredProducts.map(product => `
+        <div class="product-card" data-product-id="${product.id}">
+          <div class="product-image">
+            <img src="${product.imageUrl}" alt="${product.name}" onerror="this.src='images/p1.jpg'">
+            ${product.isNew ? '<span class="product-tag new-tag">NEW</span>' : ''}
+            ${product.isDiscounted ? `<span class="product-tag discount-tag">-${product.discountRate}%</span>` : ''}
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-category">${product.category} • ${product.subcategory}</p>
+            <div class="product-price">
+              ${product.isDiscounted ? `
+                <span class="original-price">$${product.price.toFixed(2)}</span>
+                <span class="discounted-price">$${product.discountedPrice.toFixed(2)}</span>
+              ` : `
+                <span class="current-price">$${product.price.toFixed(2)}</span>
+              `}
+            </div>
+            <button class="buy-now-btn" onclick="handleBuyNow('${product.id}')">
+              Buy Now
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Filter products
+    function filterProducts() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const selectedCategory = categoryFilter.value;
+      const selectedSubcategory = subcategoryFilter.value;
+      const selectedGender = genderFilter.value;
+      const selectedPriceRange = priceFilter.value;
+      const selectedSort = sortFilter.value;
+
+      filteredProducts = allProducts.filter(product => {
+        // Search filter
+        const matchesSearch = !searchTerm || 
+          product.name.toLowerCase().includes(searchTerm) ||
+          product.description.toLowerCase().includes(searchTerm) ||
+          product.category.toLowerCase().includes(searchTerm) ||
+          product.subcategory.toLowerCase().includes(searchTerm);
+
+        // Category filter
+        const matchesCategory = !selectedCategory || product.category === selectedCategory;
+
+        // Subcategory filter
+        const matchesSubcategory = !selectedSubcategory || product.subcategory === selectedSubcategory;
+
+        // Gender filter
+        const matchesGender = !selectedGender || !product.gender || product.gender === selectedGender || product.gender === 'Both';
+
+        // Price filter
+        let matchesPrice = true;
+        if (selectedPriceRange) {
+          const price = product.isDiscounted ? product.discountedPrice : product.price;
+          switch (selectedPriceRange) {
+            case '0-50':
+              matchesPrice = price >= 0 && price <= 50;
+              break;
+            case '50-100':
+              matchesPrice = price > 50 && price <= 100;
+              break;
+            case '100-200':
+              matchesPrice = price > 100 && price <= 200;
+              break;
+            case '200+':
+              matchesPrice = price > 200;
+              break;
+          }
+        }
+
+        return matchesSearch && matchesCategory && matchesSubcategory && matchesGender && matchesPrice;
+      });
+
+      // Sort products
+      sortProducts(selectedSort);
+      displayProducts();
+      updateProductsCount();
+    }
+
+    // Sort products
+    function sortProducts(sortType) {
+      switch (sortType) {
+        case 'newest':
+          filteredProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          break;
+        case 'oldest':
+          filteredProducts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+          break;
+        case 'price-low':
+          filteredProducts.sort((a, b) => {
+            const priceA = a.isDiscounted ? a.discountedPrice : a.price;
+            const priceB = b.isDiscounted ? b.discountedPrice : b.price;
+            return priceA - priceB;
+          });
+          break;
+        case 'price-high':
+          filteredProducts.sort((a, b) => {
+            const priceA = a.isDiscounted ? a.discountedPrice : a.price;
+            const priceB = b.isDiscounted ? b.discountedPrice : b.price;
+            return priceB - priceA;
+          });
+          break;
+      }
+    }
+
+    // Update subcategories based on selected category
+    function updateSubcategories() {
+      const selectedCategory = categoryFilter.value;
+      subcategoryFilter.innerHTML = '<option value="">All Subcategories</option>';
+      
+      if (selectedCategory && subcategories[selectedCategory]) {
+        subcategories[selectedCategory].forEach(sub => {
+          const option = document.createElement('option');
+          option.value = sub;
+          option.textContent = sub;
+          subcategoryFilter.appendChild(option);
+        });
+      }
+    }
+
+    // Update products count
+    function updateProductsCount() {
+      const count = filteredProducts.length;
+      productsCount.textContent = `${count} product${count !== 1 ? 's' : ''}`;
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      searchInput.addEventListener('input', filterProducts);
+      categoryFilter.addEventListener('change', () => {
+        updateSubcategories();
+        filterProducts();
+      });
+      subcategoryFilter.addEventListener('change', filterProducts);
+      genderFilter.addEventListener('change', filterProducts);
+      priceFilter.addEventListener('change', filterProducts);
+      sortFilter.addEventListener('change', filterProducts);
+    }
+
+    // Handle buy now button
+    window.handleBuyNow = function(productId) {
+      const product = allProducts.find(p => p.id === productId);
+      if (product) {
+        alert(`Added "${product.name}" to cart!`);
+        // Here you would typically add to cart functionality
+      }
+    };
+
+    // Footer Scroll to Top Script
     document.addEventListener('DOMContentLoaded', function() {
         const footerLogo = document.querySelector('.footer-logo-text');
         
