@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact KickStart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Contact Us</h1>
+    <p>We’re here to help you get started!</p>
+  </header>
+
+  <section class="contact-info">
+    <h2>Customer Service</h2>
+    <p>Email: <a href="mailto:support@kickstart.com">support@kickstart.com</a></p>
+    <p>Phone: +216 123 456 789</p>
+    <p>Working Hours: Mon–Fri, 9 AM – 6 PM</p>
+  </section>
+
+  <section class="contact-form">
+    <h2>Send Us a Message</h2>
+    <form id="contactForm">
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>Follow us on 
+      <a href="#">Facebook</a> | 
+      <a href="#">Instagram</a> | 
+      <a href="#">Twitter</a>
+    </p>
+  </footer>
+
+  <script>
+  document.getElementById("contactForm").addEventListener("submit", function(event){
+    event.preventDefault();
+    alert("Thank you for contacting KickStart! We'll get back to you soon.");
+  });
+  </script>
+</body>
+</html>
