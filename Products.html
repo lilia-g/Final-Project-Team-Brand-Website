@@ -107,6 +107,14 @@
             <option value="Both">Both</option>
           </select>
 
+          <!-- Discount Filter -->
+          <select id="discountFilter" class="filter-select">
+            <option value="">All Products</option>
+            <option value="discounted">Discounted Only</option>
+            <option value="new">New Products</option>
+            <option value="regular">Regular Price</option>
+          </select>
+
           <!-- Price Filter -->
           <select id="priceFilter" class="filter-select">
             <option value="">All Prices</option>
@@ -296,6 +304,7 @@
     const categoryFilter = document.getElementById('categoryFilter');
     const subcategoryFilter = document.getElementById('subcategoryFilter');
     const genderFilter = document.getElementById('genderFilter');
+    const discountFilter = document.getElementById('discountFilter');
     const priceFilter = document.getElementById('priceFilter');
     const sortFilter = document.getElementById('sortFilter');
     const productsGrid = document.getElementById('productsGrid');
@@ -358,15 +367,24 @@
             ${product.isDiscounted ? `<span class="product-tag discount-tag">-${product.discountRate}%</span>` : ''}
           </div>
           <div class="product-info">
-            <h3 class="product-name">${product.name}</h3>
-            <p class="product-category">${product.category} • ${product.subcategory}</p>
-            <div class="product-price">
-              ${product.isDiscounted ? `
-                <span class="original-price">$${product.price.toFixed(2)}</span>
-                <span class="discounted-price">$${product.discountedPrice.toFixed(2)}</span>
-              ` : `
-                <span class="current-price">$${product.price.toFixed(2)}</span>
-              `}
+            <div class="product-content">
+              <h3 class="product-name">${product.name}</h3>
+              <p class="product-category">${product.category} • ${product.subcategory}</p>
+              ${product.options && product.options.length > 0 ? `
+                <div class="product-options">
+                  ${product.options.map(opt => `
+                    <span class="option-tag">${opt.option}</span>
+                  `).join('')}
+                </div>
+              ` : ''}
+              <div class="product-price">
+                ${product.isDiscounted ? `
+                  <span class="original-price">$${product.price.toFixed(2)}</span>
+                  <span class="discounted-price">$${product.discountedPrice.toFixed(2)}</span>
+                ` : `
+                  <span class="current-price">$${product.price.toFixed(2)}</span>
+                `}
+              </div>
             </div>
             <button class="buy-now-btn" onclick="handleBuyNow('${product.id}')">
               Buy Now
@@ -382,6 +400,7 @@
       const selectedCategory = categoryFilter.value;
       const selectedSubcategory = subcategoryFilter.value;
       const selectedGender = genderFilter.value;
+      const selectedDiscount = discountFilter.value;
       const selectedPriceRange = priceFilter.value;
       const selectedSort = sortFilter.value;
 
@@ -401,6 +420,22 @@
 
         // Gender filter
         const matchesGender = !selectedGender || !product.gender || product.gender === selectedGender || product.gender === 'Both';
+
+        // Discount filter
+        let matchesDiscount = true;
+        if (selectedDiscount) {
+          switch (selectedDiscount) {
+            case 'discounted':
+              matchesDiscount = product.isDiscounted === true;
+              break;
+            case 'new':
+              matchesDiscount = product.isNew === true;
+              break;
+            case 'regular':
+              matchesDiscount = !product.isDiscounted && !product.isNew;
+              break;
+          }
+        }
 
         // Price filter
         let matchesPrice = true;
@@ -422,7 +457,7 @@
           }
         }
 
-        return matchesSearch && matchesCategory && matchesSubcategory && matchesGender && matchesPrice;
+        return matchesSearch && matchesCategory && matchesSubcategory && matchesGender && matchesDiscount && matchesPrice;
       });
 
       // Sort products
@@ -487,6 +522,7 @@
       });
       subcategoryFilter.addEventListener('change', filterProducts);
       genderFilter.addEventListener('change', filterProducts);
+      discountFilter.addEventListener('change', filterProducts);
       priceFilter.addEventListener('change', filterProducts);
       sortFilter.addEventListener('change', filterProducts);
     }

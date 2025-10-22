@@ -65,7 +65,21 @@ class Navigation {
         this.darkModeToggle = document.getElementById('dark-mode-toggle');
         this.themeIcon = document.getElementById('theme-icon');
         
-        this.init();
+        console.log('Navigation constructor - Elements found:', {
+            navbar: !!this.navbar,
+            navMenu: !!this.navMenu,
+            navToggle: !!this.navToggle,
+            darkModeToggle: !!this.darkModeToggle,
+            themeIcon: !!this.themeIcon
+        });
+        
+        // Only initialize if we have the required elements
+        if (this.navbar && this.darkModeToggle) {
+            console.log('Navigation: Required elements found, initializing...');
+            this.init();
+        } else {
+            console.log('Navigation: Required elements not found, skipping navigation initialization');
+        }
     }
     
     init() {
@@ -100,7 +114,10 @@ class Navigation {
     }
     
     setupMobileMenu() {
-        if (!this.navToggle || !this.navMenu) return;
+        if (!this.navToggle || !this.navMenu) {
+            console.log('Mobile menu elements not found, skipping mobile menu setup');
+            return;
+        }
         
         this.navToggle.addEventListener('click', () => {
             this.navMenu.classList.toggle('active');
@@ -129,10 +146,20 @@ class Navigation {
     }
     
     setupDarkMode() {
-        if (!this.darkModeToggle || !this.themeIcon) return;
+        if (!this.darkModeToggle || !this.themeIcon) {
+            console.log('Navigation setupDarkMode: Dark mode toggle elements not found, skipping dark mode setup');
+            return;
+        }
+        
+        console.log('Navigation setupDarkMode: Setting up dark mode toggle...');
+        
+        // Mark this button as handled to prevent conflicts with light-mode-toggle.js
+        this.darkModeToggle.setAttribute('data-handled', 'true');
         
         // Check for saved theme preference or default to light mode
         const savedTheme = localStorage.getItem('theme') || 'light';
+        console.log('Navigation setupDarkMode: Saved theme:', savedTheme);
+        
         document.body.classList.toggle('dark-mode', savedTheme === 'dark');
         this.updateThemeIcon(savedTheme);
         
@@ -140,10 +167,14 @@ class Navigation {
             const isDarkMode = document.body.classList.contains('dark-mode');
             const newTheme = isDarkMode ? 'light' : 'dark';
             
+            console.log('Navigation setupDarkMode: Toggle clicked, switching to:', newTheme);
+            
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', newTheme);
             this.updateThemeIcon(newTheme);
         });
+        
+        console.log('Navigation setupDarkMode: Dark mode setup complete');
     }
     
     updateThemeIcon(theme) {
@@ -450,20 +481,20 @@ class HeroSlider {
    ======================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initializing components...');
+    console.log('Main.js: DOM loaded, initializing components...');
     new Navigation();
     new BackToTopButton();
     new HeroSlider();
-    console.log('All components initialized');
+    console.log('Main.js: All components initialized');
 });
 
 // Also try to initialize immediately if DOM is already loaded
 if (document.readyState === 'loading') {
     // DOM is still loading, wait for DOMContentLoaded
-    console.log('DOM is loading, waiting for DOMContentLoaded');
+    console.log('Main.js: DOM is loading, waiting for DOMContentLoaded');
 } else {
     // DOM is already loaded, initialize immediately
-    console.log('DOM already loaded, initializing immediately');
+    console.log('Main.js: DOM already loaded, initializing immediately');
     new Navigation();
     new BackToTopButton();
     new HeroSlider();

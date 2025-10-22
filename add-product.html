@@ -4,150 +4,135 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KickStart | Add Product</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f5f5f5;
-      padding: 40px;
-      color: #222;
-    }
-    form {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      padding: 25px 35px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-    form h2 {
-      text-align: center;
-      color: #e63946;
-      margin-bottom: 25px;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 600;
-    }
-    input, select, textarea, button {
-      width: 100%;
-      margin-top: 8px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
-    button {
-      background: #e63946;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 25px;
-    }
-    button:hover {
-      background: #c92030;
-    }
-
-    .option-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-      align-items: center;
-    }
-
-    .remove-btn {
-      background: #dc3545 !important;
-      color: white !important;
-      border: none !important;
-      padding: 8px 12px !important;
-      border-radius: 5px !important;
-      cursor: pointer !important;
-      font-size: 12px !important;
-      width: auto !important;
-      margin-top: 0 !important;
-    }
-
-    .remove-btn:hover {
-      background: #c82333 !important;
-    }
-
-    #genderField {
-      display: none;
-    }
-  </style>
+  
+  <link rel="shortcut icon" href="images/falcone.png" type="faclcone-kickstart">
+  <!-- Main Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
-  <form id="productForm">
-    <h2>Add New Product</h2>
-
-    <label>Product Name</label>
-    <input type="text" id="name" placeholder="Enter product name" required>
-
-    <label>Description</label>
-    <textarea id="description" placeholder="Enter product description" required></textarea>
-
-    <label>Price</label>
-    <input type="number" id="price" placeholder="Enter price" step="0.01" required>
-
-    <label>Category</label>
-    <select id="category" required>
-      <option value="">Select Category</option>
-      <option value="Clothing">Clothing</option>
-      <option value="Footwear">Footwear</option>
-      <option value="Gym & Fitness Gear">Gym & Fitness Gear</option>
-      <option value="Sports Equipment">Sports Equipment</option>
-    </select>
-
-    <label>Subcategory</label>
-    <select id="subcategory" disabled required>
-      <option value="">Select Subcategory</option>
-    </select>
-
-    <div id="genderField">
-      <label>Gender</label>
-      <select id="gender">
-        <option value="">Select Gender</option>
-        <option value="Men">Men</option>
-        <option value="Women">Women</option>
-        <option value="Both">Both</option>
-      </select>
-    </div>
-
-    <!-- Universal Option Field -->
-    <div id="optionField">
-      <label>Options & Quantities</label>
-      <div id="optionInputs">
-        <div class="option-row">
-          <input type="text" placeholder="Option (e.g. M, 5kg, 120cm)" class="option-input">
-          <input type="number" placeholder="Quantity" class="quantity-input" min="0">
-          <button type="button" class="remove-btn" onclick="removeOptionRow(this)">Remove</button>
+  <header>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+        <!-- Logo Section -->
+        <div class="nav-logo">
+            <a href="index.html" class="logo-text">Kickstart Admin Dashboard</a>
         </div>
-      </div>
-      <button type="button" onclick="addOptionRow()" style="margin-top: 10px; background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Add Option</button>
-    </div>
-
-    <label>Image URL</label>
-    <input type="text" id="imageUrl" placeholder="Enter image URL" required>
-
-    <div style="margin-top:15px;">
-      <input type="checkbox" id="isNew"> New
-      <input type="checkbox" id="isDiscounted"> Discounted
-      
-      <div id="discountField" style="margin-top: 10px;">
-        <label>Discount Rate (%)</label>
-        <input type="number" id="discountRate" placeholder="Enter discount percentage" min="0" max="100" step="0.01">
-        <div id="discountPreview" style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; display: none;">
-          <strong>Price After Discount: $<span id="discountedPrice">0.00</span></strong>
+            
+            <!-- Right Section with Icons -->
+            <div class="nav-actions">
+                <button class="nav-icon-btn" id="dark-mode-toggle" aria-label="Toggle dark mode">
+                    <svg class="nav-icon" id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                </button>
+                
+                <button class="nav-icon-btn" aria-label="User login">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </button>
+            </div>
         </div>
-      </div>
-    </div>
+    </nav>
+  </header>
+  <main class="admin-main">
+    <div class="admin-container">
+      <form id="productForm" class="admin-form">
+        <h2 class="form-title">Add New Product</h2>
 
-    <div id="totalStock" style="margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 5px; display: none;">
-      <strong>Total Items in Stock: <span id="totalStockCount">0</span></strong>
-    </div>
+        <div class="form-group">
+          <label class="form-label">Product Name</label>
+          <input type="text" id="name" class="form-input" placeholder="Enter product name" required>
+        </div>
 
-    <button type="submit">Add Product</button>
-  </form>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea id="description" class="form-textarea" placeholder="Enter product description" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Price</label>
+          <input type="number" id="price" class="form-input" placeholder="Enter price" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select id="category" class="form-select" required>
+            <option value="">Select Category</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Footwear">Footwear</option>
+            <option value="Gym & Fitness Gear">Gym & Fitness Gear</option>
+            <option value="Sports Equipment">Sports Equipment</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Subcategory</label>
+          <select id="subcategory" class="form-select" disabled required>
+            <option value="">Select Subcategory</option>
+          </select>
+        </div>
+
+        <div id="genderField" class="form-group" style="display: none;">
+          <label class="form-label">Gender</label>
+          <select id="gender" class="form-select">
+            <option value="">Select Gender</option>
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Both">Both</option>
+          </select>
+        </div>
+
+        <!-- Universal Option Field -->
+        <div id="optionField" class="form-group">
+          <label class="form-label">Options & Quantities</label>
+          <div id="optionInputs">
+            <div class="option-row">
+              <input type="text" placeholder="Option (e.g. M, 5kg, 120cm)" class="option-input form-input">
+              <input type="number" placeholder="Quantity" class="quantity-input form-input" min="0">
+              <button type="button" class="remove-btn" onclick="removeOptionRow(this)">Remove</button>
+            </div>
+          </div>
+          <button type="button" onclick="addOptionRow()" class="add-option-btn">Add Option</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Image URL</label>
+          <input type="text" id="imageUrl" class="form-input" placeholder="Enter image URL" required>
+        </div>
+
+        <div class="form-group">
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="isNew" class="form-checkbox">
+              <span class="checkbox-text">New Product</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="isDiscounted" class="form-checkbox">
+              <span class="checkbox-text">Discounted</span>
+            </label>
+          </div>
+          
+          <div id="discountField" class="discount-field" style="display: none;">
+            <label class="form-label">Discount Rate (%)</label>
+            <input type="number" id="discountRate" class="form-input" placeholder="Enter discount percentage" min="0" max="100" step="0.01">
+            <div id="discountPreview" class="discount-preview">
+              <strong>Price After Discount: $<span id="discountedPrice">0.00</span></strong>
+            </div>
+          </div>
+        </div>
+
+        <div id="totalStock" class="total-stock">
+          <strong>Total Items in Stock: <span id="totalStockCount">0</span></strong>
+        </div>
+
+        <button type="submit" class="submit-btn">Add Product</button>
+      </form>
+    </div>
+  </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -211,8 +196,8 @@
       const row = document.createElement("div");
       row.className = "option-row";
       row.innerHTML = `
-        <input type="text" placeholder="Option (e.g. M, 5kg, 120cm)" class="option-input">
-        <input type="number" placeholder="Quantity" class="quantity-input" min="0" onchange="calculateTotalStock()">
+        <input type="text" placeholder="Option (e.g. M, 5kg, 120cm)" class="option-input form-input">
+        <input type="number" placeholder="Quantity" class="quantity-input form-input" min="0" onchange="calculateTotalStock()">
         <button type="button" class="remove-btn" onclick="removeOptionRow(this)">Remove</button>
       `;
       container.appendChild(row);
@@ -303,6 +288,29 @@
       } catch (error) {
         console.error("❌ Error adding product:", error);
         alert("Something went wrong while adding the product.");
+      }
+    });
+  </script>
+  
+  <!-- Load navigation and dark mode scripts after Firebase -->
+  <script src="js/main.js"></script>
+  <script src="js/light-mode-toggle.js"></script>
+  
+  <!-- Ensure dark mode is applied on page load -->
+  <script>
+    // Apply saved theme immediately when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+      
+      // Update theme icon
+      const themeIcon = document.getElementById('theme-icon');
+      if (themeIcon) {
+        if (savedTheme === 'dark') {
+          themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+        } else {
+          themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+        }
       }
     });
   </script>

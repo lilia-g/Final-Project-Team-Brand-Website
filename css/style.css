@@ -1746,7 +1746,7 @@ body.dark-mode .discount-image:hover {
 
 .filters-row {
     display: flex;
-    gap: var(--space-3);
+    gap: var(--space-2);
     align-items: center;
     flex-wrap: wrap;
 }
@@ -1794,7 +1794,8 @@ body.dark-mode .discount-image:hover {
     font-size: 0.9rem;
     transition: all var(--transition-normal);
     cursor: pointer;
-    min-width: 120px;
+    min-width: 110px;
+    flex-shrink: 0;
 }
 
 .filter-select:focus {
@@ -1858,6 +1859,9 @@ body.dark-mode .discount-image:hover {
     transition: all var(--transition-normal);
     cursor: pointer;
     border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .product-card:hover {
@@ -1915,6 +1919,16 @@ body.dark-mode .discount-image:hover {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    flex: 1;
+    justify-content: space-between;
+}
+
+/* Product Content (everything except button) */
+.product-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
 }
 
 .product-name {
@@ -1932,6 +1946,26 @@ body.dark-mode .discount-image:hover {
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+/* Product Options */
+.product-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin: var(--space-1) 0;
+}
+
+.option-tag {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    font-size: 0.7rem;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+    font-weight: 500;
+    line-height: 1.2;
+    display: inline-block;
 }
 
 /* Product Price */
@@ -1975,7 +2009,7 @@ body.dark-mode .discount-image:hover {
 
 /* Buy Now Button */
 .buy-now-btn {
-    background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+    background: var(--primary-orange);
     color: var(--white);
     border: none;
     padding: var(--space-3) var(--space-6);
@@ -1986,36 +2020,20 @@ body.dark-mode .discount-image:hover {
     transition: all var(--transition-normal);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-top: var(--space-2);
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(255, 88, 0, 0.2);
-}
-
-.buy-now-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
+    margin-top: auto;
+    box-shadow: 0 2px 8px rgba(255, 88, 0, 0.2);
+    flex-shrink: 0;
 }
 
 .buy-now-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 88, 0, 0.4);
-    background: linear-gradient(135deg, var(--primary-orange-dark), var(--primary-orange-darker));
-}
-
-.buy-now-btn:hover::before {
-    left: 100%;
+    background: var(--primary-orange-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 88, 0, 0.3);
 }
 
 .buy-now-btn:active {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(255, 88, 0, 0.3);
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(255, 88, 0, 0.2);
 }
 
 /* Loading State */
@@ -2132,20 +2150,28 @@ body.dark-mode .product-category {
     color: var(--gray-400);
 }
 
+/* Dark mode styles for product-options are handled by option-tag */
+
+body.dark-mode .option-tag {
+    background: var(--bg-primary);
+    color: var(--gray-300);
+    border-color: var(--border-color);
+}
+
 body.dark-mode .current-price,
 body.dark-mode .discounted-price {
     color: var(--gray-300);
 }
 
 body.dark-mode .buy-now-btn {
-    background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+    background: var(--primary-orange);
     color: var(--white);
-    box-shadow: 0 4px 15px rgba(255, 88, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(255, 88, 0, 0.3);
 }
 
 body.dark-mode .buy-now-btn:hover {
-    background: linear-gradient(135deg, var(--primary-orange-dark), var(--primary-orange-darker));
-    box-shadow: 0 8px 25px rgba(255, 88, 0, 0.5);
+    background: var(--primary-orange-dark);
+    box-shadow: 0 4px 12px rgba(255, 88, 0, 0.4);
 }
 
 body.dark-mode .loading-state p {
@@ -2181,6 +2207,7 @@ body.dark-mode .no-products-icon {
     
     .filter-select {
         min-width: 100px;
+        flex-shrink: 1;
     }
 }
 
@@ -2282,9 +2309,452 @@ body.dark-mode .no-products-icon {
         font-size: 0.8rem;
     }
     
+    .option-tag {
+        font-size: 0.65rem;
+        padding: 2px var(--space-1);
+    }
+    
     .buy-now-btn {
         padding: var(--space-2) var(--space-3);
         font-size: 0.85rem;
+    }
+}
+
+/* ========================================
+   NEW PRODUCTS & PRODUCTS SECTIONS STYLES
+   ======================================== */
+
+.new-products, .products {
+    padding: var(--space-16) 0;
+    background: var(--bg-primary);
+    margin: 0;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.new-products-container, .products-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-8);
+}
+
+.section-title {
+    font-family: var(--font-logo);
+    font-size: 2.5rem;
+    color: var(--primary-orange);
+    margin: 0;
+    font-weight: 400;
+}
+
+.see-more-btn {
+    color: var(--primary-orange);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all var(--transition-normal);
+    padding: var(--space-2) 0;
+}
+
+.see-more-btn:hover {
+    color: var(--primary-orange-dark);
+    text-decoration: underline;
+}
+
+/* Products Grid for Homepage */
+.new-products .products-grid, .products .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+}
+
+/* Dark mode adjustments for new products and products sections */
+body.dark-mode .new-products, body.dark-mode .products {
+    background: var(--bg-primary);
+}
+
+body.dark-mode .see-more-btn {
+    color: var(--primary-orange);
+}
+
+body.dark-mode .see-more-btn:hover {
+    color: var(--primary-orange-light);
+}
+
+/* Responsive Design for New Products and Products Sections */
+@media (max-width: 1024px) {
+    .section-title {
+        font-size: 2.2rem;
+    }
+    
+    .new-products .products-grid, .products .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-5);
+    }
+}
+
+@media (max-width: 768px) {
+    .new-products, .products {
+        padding: var(--space-12) 0;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: var(--space-4);
+        text-align: center;
+        margin-bottom: var(--space-6);
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .new-products .products-grid, .products .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+    }
+}
+
+@media (max-width: 480px) {
+    .new-products, .products {
+        padding: var(--space-10) 0;
+    }
+    
+    .new-products-container, .products-container {
+        padding: 0 var(--space-4);
+    }
+    
+    .section-header {
+        gap: var(--space-3);
+        margin-bottom: var(--space-5);
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .new-products .products-grid, .products .products-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .see-more-btn {
+        font-size: 0.9rem;
+    }
+}
+
+/* ========================================
+   ADMIN FORM STYLES
+   ======================================== */
+
+.admin-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6);
+    min-height: calc(100vh - 60px);
+}
+
+.admin-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.admin-form {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    box-shadow: 0 4px 20px var(--shadow-color);
+    border: 1px solid var(--border-color);
+}
+
+.form-title {
+    font-family: var(--font-logo);
+    font-size: 2rem;
+    color: var(--primary-orange);
+    text-align: center;
+    margin: 0 0 var(--space-6) 0;
+    font-weight: 400;
+}
+
+.form-group {
+    margin-bottom: var(--space-6);
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    font-size: 0.95rem;
+}
+
+.form-input, .form-textarea, .form-select {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: all var(--transition-normal);
+    font-family: var(--font-primary);
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255, 88, 0, 0.1);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: var(--space-6);
+    margin-bottom: var(--space-4);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-orange);
+    cursor: pointer;
+}
+
+.checkbox-text {
+    font-size: 0.95rem;
+}
+
+.discount-field {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.discount-preview {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    display: none;
+}
+
+.total-stock {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    display: none;
+}
+
+.option-row {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+    align-items: center;
+}
+
+.option-input, .quantity-input {
+    flex: 1;
+    /* Inherit form input styling */
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: all var(--transition-normal);
+    font-family: var(--font-primary);
+}
+
+.option-input:focus, .quantity-input:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255, 88, 0, 0.1);
+}
+
+.remove-btn {
+    background: #dc3545;
+    color: var(--white);
+    border: none;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all var(--transition-normal);
+    white-space: nowrap;
+}
+
+.remove-btn:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+.add-option-btn {
+    background: #28a745;
+    color: var(--white);
+    border: none;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all var(--transition-normal);
+    margin-top: var(--space-2);
+}
+
+.add-option-btn:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.submit-btn {
+    background: var(--primary-orange);
+    color: var(--white);
+    border: none;
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 100%;
+    margin-top: var(--space-6);
+    box-shadow: 0 4px 15px rgba(255, 88, 0, 0.2);
+}
+
+.submit-btn:hover {
+    background: var(--primary-orange-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 88, 0, 0.3);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(255, 88, 0, 0.2);
+}
+
+/* Dark mode adjustments for admin form */
+body.dark-mode .admin-form {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+body.dark-mode .form-input, 
+body.dark-mode .form-textarea, 
+body.dark-mode .form-select {
+    background: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+body.dark-mode .form-input:focus, 
+body.dark-mode .form-textarea:focus, 
+body.dark-mode .form-select:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255, 88, 0, 0.2);
+}
+
+body.dark-mode .option-input,
+body.dark-mode .quantity-input {
+    background: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+body.dark-mode .option-input:focus,
+body.dark-mode .quantity-input:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255, 88, 0, 0.2);
+}
+
+body.dark-mode .discount-field,
+body.dark-mode .total-stock {
+    background: var(--bg-primary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .discount-preview {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+/* Responsive Design for Admin Form */
+@media (max-width: 768px) {
+    .admin-main {
+        padding: var(--space-6) var(--space-4);
+    }
+    
+    .admin-form {
+        padding: var(--space-6);
+    }
+    
+    .form-title {
+        font-size: 1.8rem;
+    }
+    
+    .checkbox-group {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+    
+    .option-row {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+    
+    .remove-btn {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-main {
+        padding: var(--space-4) var(--space-3);
+    }
+    
+    .admin-form {
+        padding: var(--space-4);
+    }
+    
+    .form-title {
+        font-size: 1.6rem;
+    }
+    
+    .submit-btn {
+        padding: var(--space-3) var(--space-6);
+        font-size: 0.9rem;
     }
 }
 

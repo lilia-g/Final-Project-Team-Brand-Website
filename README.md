@@ -14,4 +14,7 @@ Example file structure and purpose:
 ├── about.html          → About KickStart (mission, story, brand values)      (sheku)
 ├── contact.html        → Contact form or customer service details            (sheku)
 
+extra 
+├──Add-New-Product.html  → so admmin can add product to the site web ( lilia )
+
 

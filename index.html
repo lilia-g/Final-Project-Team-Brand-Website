@@ -175,9 +175,15 @@
     
 <section class="new-products">
   <div class="new-products-container">
-    
+    <div class="section-header">
+      <h2 class="section-title">Our Newest Products</h2>
+      <a href="Products.html" class="see-more-btn">See More</a>
+    </div>
+    <div class="products-grid" id="newProductsGrid">
+      <!-- Newest products will be loaded here -->
     </div>
   </div>
+</section>
 <section class="discount">
   <div class="discount-container">
     <div class="discount-content">
@@ -192,17 +198,22 @@
           Grab your favorites before they’re gone!
         </p>
        
-        <button class="discount-btn">Explore Offers</button>
+        <button class="discount-btn" onclick="window.location.href='Products.html'">Explore Offers</button>
       </div>
     </div>
   </div>
 </section>
 <section class="products">
   <div class="products-container">
-    
-      </div>
+    <div class="section-header">
+      <h2 class="section-title">Our Products</h2>
+      <a href="Products.html" class="see-more-btn">See More</a>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <!-- Regular products will be loaded here -->
     </div>
   </div>
+</section>
 <section class="testimonials">
   <div class="testimonials-container">
     <h2 class="testimonials-heading">What Our Customers Say</h2>
@@ -387,6 +398,129 @@
 
     <script src="js/light-mode-toggle.js"></script>
   <script src="js/main.js"></script>
+  
+  <!-- Products Loading Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, where } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA4U5Yd3tVKYs-bH6cEoXPy3doKromm1hU",
+      authDomain: "test1-ef56d.firebaseapp.com",
+      projectId: "test1-ef56d",
+      storageBucket: "test1-ef56d.firebasestorage.app",
+      messagingSenderId: "767603614507",
+      appId: "1:767603614507:web:4ee8e36ec3e963a1089b6e",
+      measurementId: "G-DVFHE3KH98"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Load newest products (8 most recent products from database)
+    async function loadNewestProducts() {
+      try {
+        const productsRef = collection(db, "products");
+        const q = query(productsRef, orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        
+        const products = [];
+        querySnapshot.forEach((doc) => {
+          products.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Take only first 8 products (newest by creation date)
+        const newestProducts = products.slice(0, 8);
+        displayProducts(newestProducts, 'newProductsGrid');
+      } catch (error) {
+        console.error("Error loading newest products:", error);
+      }
+    }
+
+    // Load regular products (8 random products that are not new or discounted)
+    async function loadRegularProducts() {
+      try {
+        const productsRef = collection(db, "products");
+        const q = query(productsRef, orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        
+        const allProducts = [];
+        querySnapshot.forEach((doc) => {
+          allProducts.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Filter out new and discounted products
+        const regularProducts = allProducts.filter(product => 
+          !product.isNew && !product.isDiscounted
+        );
+
+        // Shuffle and take first 8 products
+        const shuffled = regularProducts.sort(() => 0.5 - Math.random());
+        const selectedProducts = shuffled.slice(0, 8);
+        
+        displayProducts(selectedProducts, 'productsGrid');
+      } catch (error) {
+        console.error("Error loading regular products:", error);
+      }
+    }
+
+    // Display products in grid
+    function displayProducts(products, gridId) {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+
+      if (products.length === 0) {
+        grid.innerHTML = '<p>No products available</p>';
+        return;
+      }
+
+      grid.innerHTML = products.map(product => `
+        <div class="product-card" data-product-id="${product.id}">
+          <div class="product-image">
+            <img src="${product.imageUrl}" alt="${product.name}" onerror="this.src='images/p1.jpg'">
+            ${product.isNew ? '<span class="product-tag new-tag">NEW</span>' : ''}
+            ${product.isDiscounted ? `<span class="product-tag discount-tag">-${product.discountRate}%</span>` : ''}
+          </div>
+          <div class="product-info">
+            <div class="product-content">
+              <h3 class="product-name">${product.name}</h3>
+              <p class="product-category">${product.category} • ${product.subcategory}</p>
+              ${product.options && product.options.length > 0 ? `
+                <div class="product-options">
+                  ${product.options.map(opt => `
+                    <span class="option-tag">${opt.option}</span>
+                  `).join('')}
+                </div>
+              ` : ''}
+              <div class="product-price">
+                ${product.isDiscounted ? `
+                  <span class="original-price">$${product.price.toFixed(2)}</span>
+                  <span class="discounted-price">$${product.discountedPrice.toFixed(2)}</span>
+                ` : `
+                  <span class="current-price">$${product.price.toFixed(2)}</span>
+                `}
+              </div>
+            </div>
+            <button class="buy-now-btn" onclick="handleBuyNow('${product.id}')">
+              Buy Now
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Handle buy now button
+    window.handleBuyNow = function(productId) {
+      alert(`Added product to cart! Product ID: ${productId}`);
+      // Here you would typically add to cart functionality
+    };
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadNewestProducts();
+      await loadRegularProducts();
+    });
+  </script>
   
   <!-- Footer Scroll to Top Script -->
   <script>
