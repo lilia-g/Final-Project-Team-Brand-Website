@@ -13,8 +13,14 @@
    NAVIGATION COMPONENT STYLES
    ======================================== */
 
-/* Import Heavitas font */
-@import url('https://fonts.googleapis.com/css2?family=Heavitas:wght@400&display=swap');
+/* Import Heavitas font locally */
+@font-face {
+    font-family: 'Heavitas';
+    src: url('../fonts/Heavitas.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
 
 /* Navigation Base Styles */
 .navbar {
@@ -522,7 +528,7 @@ body.menu-open {
 main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: var(--space-8) 0;
+    padding: 0;
     min-height: 60vh;
 }
 
@@ -843,5 +849,553 @@ main {
     .social-icon {
         width: 16px;
         height: 16px;
+    }
+}
+
+/* ========================================
+   HERO SLIDER STYLES
+   ======================================== */
+
+.hero {
+    position: relative;
+    width: 100vw;
+    height: 90vh;
+    min-height: 540px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+}
+
+.hero-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.slide-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.slide-content {
+    position: absolute;
+    top: 25%;
+    left: var(--space-8);
+    transform: translateY(-50%);
+    z-index: 2;
+    text-align: left;
+    color: var(--white);
+    max-width: 600px;
+    padding: var(--space-8);
+    animation: slideInLeft 1s ease 0.3s both;
+}
+
+.slide-title {
+    font-family: var(--font-logo);
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: var(--primary-orange);
+    margin-bottom: var(--space-3);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: 1.1;
+}
+
+.slide-description {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: var(--white);
+    font-weight: 420;
+    line-height: 1.8;
+    margin: 0;
+}
+
+/* Slider Navigation Dots */
+.slider-dots {
+    position: absolute;
+    bottom: var(--space-8);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--space-3);
+    z-index: 3;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    opacity: 0.7;
+}
+
+.dot:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.dot.active {
+    background: var(--primary-orange);
+    border-color: var(--primary-orange);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+
+/* Slide Animation Keyframes */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive Design for Hero Slider */
+@media (max-width: 1024px) {
+    .slide-content {
+        max-width: 500px;
+        padding: var(--space-5);
+        left: var(--space-6);
+    }
+    
+    .slide-title {
+        font-size: 2.2rem;
+    }
+    
+    .slide-description {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: 72vh;
+        min-height: 450px;
+    }
+    
+    .slide-content {
+        max-width: 85%;
+        padding: var(--space-4);
+        left: var(--space-4);
+    }
+    
+    .slide-title {
+        font-size: 2rem;
+        margin-bottom: var(--space-3);
+    }
+    
+    .slide-description {
+        font-size: 0.9rem;
+    }
+    
+    .slider-dots {
+        bottom: var(--space-6);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        height: 63vh;
+        min-height: 360px;
+    }
+    
+    .slide-content {
+        padding: var(--space-3);
+        left: var(--space-3);
+        max-width: 90%;
+    }
+    
+    .slide-title {
+        font-size: 1.8rem;
+        margin-bottom: var(--space-2);
+    }
+    
+    .slide-description {
+        font-size: 0.85rem;
+    }
+    
+    .slider-dots {
+        bottom: var(--space-4);
+        gap: var(--space-2);
+    }
+    
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* ========================================
+   CATEGORY SECTION STYLES
+   ======================================== */
+
+.category {
+    padding: var(--space-16) 0;
+    background: var(--bg-secondary);
+}
+
+.category-heading {
+    text-align: center;
+    font-family: var(--font-logo);
+    font-size: 2.5rem;
+    color: var(--primary-orange);
+    margin: 0 auto var(--space-8);
+    font-weight: 400;
+}
+
+.category-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-8);
+}
+
+.category-box {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    text-align: center;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-orange);
+}
+
+.category-box:hover .category-icon {
+    transform: scale(1.1);
+}
+
+
+
+.category-box:hover .category-title {
+    color: var(--primary-orange);
+}
+
+/* Dark mode adjustments for category section */
+body.dark-mode .category-box {
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+}
+
+body.dark-mode .category-box:hover {
+    border-color: var(--primary-orange);
+    box-shadow: 0 8px 25px rgba(255, 88, 0, 0.2);
+}
+
+body.dark-mode .category-icon svg {
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+}
+
+body.dark-mode .category-box:hover .category-icon svg {
+    filter: drop-shadow(0 4px 8px rgba(255, 88, 0, 0.4));
+}
+
+body.dark-mode .category-title {
+    color: var(--white);
+}
+
+body.dark-mode .category-box:hover .category-title {
+    color: var(--primary-orange);
+}
+
+body.dark-mode .category-icon {
+    color: var(--white);
+}
+
+/* Dark mode specific icon colors */
+body.dark-mode .clothing-icon {
+    color: var(--white);
+}
+
+body.dark-mode .clothing-icon svg {
+    stroke: var(--white);
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+}
+
+body.dark-mode .footwear-icon {
+    color: var(--white);
+}
+
+body.dark-mode .footwear-icon svg {
+    stroke: var(--white);
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+}
+
+body.dark-mode .gym-icon {
+    color: var(--white);
+}
+
+body.dark-mode .gym-icon svg {
+    stroke: var(--white);
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+}
+
+body.dark-mode .sports-icon {
+    color: var(--white);
+}
+
+body.dark-mode .sports-icon svg {
+    stroke: var(--white);
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+}
+
+/* Dark mode hover effects */
+body.dark-mode .category-box:hover .clothing-icon svg {
+    stroke: var(--primary-orange);
+    filter: drop-shadow(0 4px 8px rgba(255, 88, 0, 0.4));
+}
+
+body.dark-mode .category-box:hover .footwear-icon svg {
+    stroke: var(--primary-orange);
+    filter: drop-shadow(0 4px 8px rgba(255, 88, 0, 0.4));
+}
+
+body.dark-mode .category-box:hover .gym-icon svg {
+    stroke: var(--primary-orange);
+    filter: drop-shadow(0 4px 8px rgba(255, 88, 0, 0.4));
+}
+
+body.dark-mode .category-box:hover .sports-icon svg {
+    stroke: var(--primary-orange);
+    filter: drop-shadow(0 4px 8px rgba(255, 88, 0, 0.4));
+}
+
+.category-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-600);
+    transition: all var(--transition-normal);
+}
+
+.category-icon svg {
+    width: 32px;
+    height: 32px;
+    stroke: currentColor;
+    fill: none;
+}
+
+/* Individual Lucide icon styles - gray by default */
+.clothing-icon {
+    color: var(--gray-600);
+}
+
+.clothing-icon svg {
+    stroke: var(--gray-600);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.footwear-icon {
+    color: var(--gray-600);
+}
+
+.footwear-icon svg {
+    stroke: var(--gray-600);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.gym-icon {
+    color: var(--gray-600);
+}
+
+.gym-icon svg {
+    stroke: var(--gray-600);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.sports-icon {
+    color: var(--gray-600);
+}
+
+.sports-icon svg {
+    stroke: var(--gray-600);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Hover effects for Lucide icons - orange on hover */
+.category-box:hover .category-icon {
+    transform: scale(1.1);
+}
+
+.category-box:hover .clothing-icon svg {
+    stroke: var(--primary-orange);
+    filter: drop-shadow(0 4px 8px rgba(255, 88, 0, 0.4));
+}
+
+.category-box:hover .footwear-icon svg {
+    stroke: var(--primary-orange);
+    filter: drop-shadow(0 4px 8px rgba(255, 88, 0, 0.4));
+}
+
+.category-box:hover .gym-icon svg {
+    stroke: var(--primary-orange);
+    filter: drop-shadow(0 4px 8px rgba(255, 88, 0, 0.4));
+}
+
+.category-box:hover .sports-icon svg {
+    stroke: var(--primary-orange);
+    filter: drop-shadow(0 4px 8px rgba(255, 88, 0, 0.4));
+}
+
+.category-title {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin: 0;
+    transition: all var(--transition-normal);
+}
+
+/* Responsive Design for Category Section */
+@media (max-width: 1024px) {
+    .category-heading {
+        font-size: 2.2rem;
+    }
+    
+    .category-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-6);
+    }
+    
+    .category-box {
+        padding: var(--space-5);
+        aspect-ratio: 1 / 1;
+    }
+    
+    .category-icon {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .category-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .category {
+        padding: var(--space-12) 0;
+    }
+    
+    .category-heading {
+        font-size: 2rem;
+    }
+    
+    .category-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+        padding: 0 var(--space-4);
+    }
+    
+    .category-box {
+        padding: var(--space-4);
+        aspect-ratio: 1 / 1;
+    }
+    
+    .category-title {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .category {
+        padding: var(--space-10) 0;
+    }
+    
+    .category-heading {
+        font-size: 1.8rem;
+    }
+    
+    .category-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+        padding: 0 var(--space-3);
+    }
+    
+    .category-box {
+        padding: var(--space-4);
+        aspect-ratio: 1 / 1;
+    }
+    
+    .category-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: var(--space-3);
+    }
+    
+    .category-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .category-title {
+        font-size: 0.95rem;
     }
 }

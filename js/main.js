@@ -251,6 +251,201 @@ class Navigation {
 }
 
 /* ========================================
+   HERO SLIDER COMPONENT
+   ======================================== */
+
+class HeroSlider {
+    constructor() {
+        this.slider = document.querySelector('.hero-slider');
+        this.slides = document.querySelectorAll('.slide');
+        this.dots = document.querySelectorAll('.dot');
+        
+        this.currentSlide = 0;
+        this.totalSlides = this.slides.length;
+        this.autoSlideInterval = null;
+        this.autoSlideDelay = 5000; // 5 seconds
+        this.isTransitioning = false;
+        
+        this.init();
+    }
+    
+    init() {
+        if (!this.slider || this.slides.length === 0) {
+            console.error('Hero slider elements not found!');
+            return;
+        }
+        
+        console.log('Hero slider initialized with', this.totalSlides, 'slides');
+        
+        this.setupEventListeners();
+        this.startAutoSlide();
+        this.updateSlider();
+    }
+    
+    setupEventListeners() {
+        // Dot navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                if (!this.isTransitioning) {
+                    this.goToSlide(index);
+                }
+            });
+        });
+        
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!this.isTransitioning) {
+                if (e.key === 'ArrowLeft') {
+                    this.previousSlide();
+                } else if (e.key === 'ArrowRight') {
+                    this.nextSlide();
+                }
+            }
+        });
+        
+        // Touch/swipe support
+        this.setupTouchEvents();
+        
+        // Pause auto-slide on hover
+        this.slider.addEventListener('mouseenter', () => {
+            this.stopAutoSlide();
+        });
+        
+        this.slider.addEventListener('mouseleave', () => {
+            this.startAutoSlide();
+        });
+        
+        // Pause auto-slide when page is not visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.stopAutoSlide();
+            } else {
+                this.startAutoSlide();
+            }
+        });
+    }
+    
+    setupTouchEvents() {
+        let startX = 0;
+        let startY = 0;
+        let endX = 0;
+        let endY = 0;
+        
+        this.slider.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+        
+        this.slider.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Prevent scrolling
+        });
+        
+        this.slider.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            endY = e.changedTouches[0].clientY;
+            
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            
+            // Only trigger swipe if horizontal movement is greater than vertical
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    this.previousSlide();
+                } else {
+                    this.nextSlide();
+                }
+            }
+        });
+    }
+    
+    goToSlide(slideIndex) {
+        if (slideIndex === this.currentSlide || this.isTransitioning) {
+            return;
+        }
+        
+        this.isTransitioning = true;
+        this.stopAutoSlide();
+        
+        // Remove active class from current slide and dot
+        this.slides[this.currentSlide].classList.remove('active');
+        this.dots[this.currentSlide].classList.remove('active');
+        
+        // Update current slide
+        this.currentSlide = slideIndex;
+        
+        // Add active class to new slide and dot
+        this.slides[this.currentSlide].classList.add('active');
+        this.dots[this.currentSlide].classList.add('active');
+        
+        // Reset transition flag after animation completes
+        setTimeout(() => {
+            this.isTransitioning = false;
+            this.startAutoSlide();
+        }, 800);
+        
+        console.log('Switched to slide:', this.currentSlide + 1);
+    }
+    
+    nextSlide() {
+        const nextIndex = (this.currentSlide + 1) % this.totalSlides;
+        this.goToSlide(nextIndex);
+    }
+    
+    previousSlide() {
+        const prevIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.goToSlide(prevIndex);
+    }
+    
+    startAutoSlide() {
+        this.stopAutoSlide(); // Clear any existing interval
+        
+        this.autoSlideInterval = setInterval(() => {
+            this.nextSlide();
+        }, this.autoSlideDelay);
+        
+        console.log('Auto-slide started');
+    }
+    
+    stopAutoSlide() {
+        if (this.autoSlideInterval) {
+            clearInterval(this.autoSlideInterval);
+            this.autoSlideInterval = null;
+            console.log('Auto-slide stopped');
+        }
+    }
+    
+    updateSlider() {
+        // Ensure only the current slide is active
+        this.slides.forEach((slide, index) => {
+            slide.classList.toggle('active', index === this.currentSlide);
+        });
+        
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentSlide);
+        });
+    }
+    
+    // Public method to manually control the slider
+    pause() {
+        this.stopAutoSlide();
+    }
+    
+    resume() {
+        this.startAutoSlide();
+    }
+    
+    // Method to get current slide info
+    getCurrentSlideInfo() {
+        return {
+            current: this.currentSlide + 1,
+            total: this.totalSlides,
+            isAutoPlaying: this.autoSlideInterval !== null
+        };
+    }
+}
+
+/* ========================================
    INITIALIZATION
    ======================================== */
 
@@ -258,6 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Initializing components...');
     new Navigation();
     new BackToTopButton();
+    new HeroSlider();
     console.log('All components initialized');
 });
 
@@ -270,4 +466,5 @@ if (document.readyState === 'loading') {
     console.log('DOM already loaded, initializing immediately');
     new Navigation();
     new BackToTopButton();
+    new HeroSlider();
 }

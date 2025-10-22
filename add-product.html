@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KickStart | Add Product</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f5f5f5;
+      padding: 40px;
+      color: #222;
+    }
+    form {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 25px 35px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    form h2 {
+      text-align: center;
+      color: #e63946;
+      margin-bottom: 25px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+    button {
+      background: #e63946;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 25px;
+    }
+    button:hover {
+      background: #c92030;
+    }
+
+    .option-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .remove-btn {
+      background: #dc3545 !important;
+      color: white !important;
+      border: none !important;
+      padding: 8px 12px !important;
+      border-radius: 5px !important;
+      cursor: pointer !important;
+      font-size: 12px !important;
+      width: auto !important;
+      margin-top: 0 !important;
+    }
+
+    .remove-btn:hover {
+      background: #c82333 !important;
+    }
+
+    #genderField {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <form id="productForm">
+    <h2>Add New Product</h2>
+
+    <label>Product Name</label>
+    <input type="text" id="name" placeholder="Enter product name" required>
+
+    <label>Description</label>
+    <textarea id="description" placeholder="Enter product description" required></textarea>
+
+    <label>Price</label>
+    <input type="number" id="price" placeholder="Enter price" step="0.01" required>
+
+    <label>Category</label>
+    <select id="category" required>
+      <option value="">Select Category</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Footwear">Footwear</option>
+      <option value="Gym & Fitness Gear">Gym & Fitness Gear</option>
+      <option value="Sports Equipment">Sports Equipment</option>
+    </select>
+
+    <label>Subcategory</label>
+    <select id="subcategory" disabled required>
+      <option value="">Select Subcategory</option>
+    </select>
+
+    <div id="genderField">
+      <label>Gender</label>
+      <select id="gender">
+        <option value="">Select Gender</option>
+        <option value="Men">Men</option>
+        <option value="Women">Women</option>
+        <option value="Both">Both</option>
+      </select>
+    </div>
+
+    <!-- Universal Option Field -->
+    <div id="optionField">
+      <label>Options & Quantities</label>
+      <div id="optionInputs">
+        <div class="option-row">
+          <input type="text" placeholder="Option (e.g. M, 5kg, 120cm)" class="option-input">
+          <input type="number" placeholder="Quantity" class="quantity-input" min="0">
+          <button type="button" class="remove-btn" onclick="removeOptionRow(this)">Remove</button>
+        </div>
+      </div>
+      <button type="button" onclick="addOptionRow()" style="margin-top: 10px; background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Add Option</button>
+    </div>
+
+    <label>Image URL</label>
+    <input type="text" id="imageUrl" placeholder="Enter image URL" required>
+
+    <div style="margin-top:15px;">
+      <input type="checkbox" id="isNew"> New
+      <input type="checkbox" id="isDiscounted"> Discounted
+      
+      <div id="discountField" style="margin-top: 10px;">
+        <label>Discount Rate (%)</label>
+        <input type="number" id="discountRate" placeholder="Enter discount percentage" min="0" max="100" step="0.01">
+        <div id="discountPreview" style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; display: none;">
+          <strong>Price After Discount: $<span id="discountedPrice">0.00</span></strong>
+        </div>
+      </div>
+    </div>
+
+    <div id="totalStock" style="margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 5px; display: none;">
+      <strong>Total Items in Stock: <span id="totalStockCount">0</span></strong>
+    </div>
+
+    <button type="submit">Add Product</button>
+  </form>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA4U5Yd3tVKYs-bH6cEoXPy3doKromm1hU",
+      authDomain: "test1-ef56d.firebaseapp.com",
+      projectId: "test1-ef56d",
+      storageBucket: "test1-ef56d.firebasestorage.app",
+      messagingSenderId: "767603614507",
+      appId: "1:767603614507:web:4ee8e36ec3e963a1089b6e",
+      measurementId: "G-DVFHE3KH98"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const subcategories = {
+      "Clothing": ["T-shirts", "Shorts", "Track Pants", "Hoodies", "Jackets", "Leggings", "Sports Bras", "Tops", "Tank Tops", "Sweatshirts", "Tracksuits", "Sports Shirts", "Polo Shirts", "Athletic Shorts", "Boxing Gloves", "Gloves"],
+      "Footwear": ["Running Shoes", "Training Shoes", "Football Boots", "Basketball Shoes", "Hiking Boots", "Sneakers"],
+      "Gym & Fitness Gear": ["Dumbbells", "Kettlebells", "Barbells", "Weight Plates", "Medicine Balls", "Resistance Bands", "Yoga Mats", "Jump Ropes", "Gym Bags", "Foam Rollers"],
+      "Sports Equipment": ["Footballs", "Basketballs", "Volleyballs", "Tennis Rackets", "Badminton Rackets", "Shuttlecocks", "Skipping Ropes"]
+    };
+
+    const categorySelect = document.getElementById("category");
+    const subcategorySelect = document.getElementById("subcategory");
+    const genderField = document.getElementById("genderField");
+    const discountField = document.getElementById("discountField");
+    const discountRate = document.getElementById("discountRate");
+    const priceInput = document.getElementById("price");
+    const discountPreview = document.getElementById("discountPreview");
+    const discountedPriceSpan = document.getElementById("discountedPrice");
+    const totalStockDiv = document.getElementById("totalStock");
+    const totalStockCount = document.getElementById("totalStockCount");
+
+    categorySelect.addEventListener("change", () => {
+      const selectedCategory = categorySelect.value;
+      subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+      subcategorySelect.disabled = true;
+      genderField.style.display = "none";
+
+      if (selectedCategory && subcategories[selectedCategory]) {
+        subcategorySelect.disabled = false;
+        subcategories[selectedCategory].forEach(sub => {
+          const option = document.createElement("option");
+          option.value = sub;
+          option.textContent = sub;
+          subcategorySelect.appendChild(option);
+        });
+
+        if (selectedCategory === "Clothing" || selectedCategory === "Footwear") {
+          genderField.style.display = "block";
+        }
+      }
+    });
+
+    // Add/remove rows
+    window.addOptionRow = function() {
+      const container = document.getElementById("optionInputs");
+      const row = document.createElement("div");
+      row.className = "option-row";
+      row.innerHTML = `
+        <input type="text" placeholder="Option (e.g. M, 5kg, 120cm)" class="option-input">
+        <input type="number" placeholder="Quantity" class="quantity-input" min="0" onchange="calculateTotalStock()">
+        <button type="button" class="remove-btn" onclick="removeOptionRow(this)">Remove</button>
+      `;
+      container.appendChild(row);
+    };
+
+    window.removeOptionRow = function(button) {
+      button.parentElement.remove();
+      calculateTotalStock();
+    };
+
+    // Stock calculation
+    window.calculateTotalStock = function() {
+      let total = 0;
+      document.querySelectorAll(".quantity-input").forEach(input => {
+        total += parseInt(input.value) || 0;
+      });
+      totalStockCount.textContent = total;
+      totalStockDiv.style.display = total > 0 ? "block" : "none";
+    };
+
+    // Discount calculation
+    function calculateDiscountedPrice() {
+      const price = parseFloat(priceInput.value) || 0;
+      const discount = parseFloat(discountRate.value) || 0;
+      if (price > 0 && discount > 0) {
+        const discountedPrice = price * (1 - discount / 100);
+        discountedPriceSpan.textContent = discountedPrice.toFixed(2);
+        discountPreview.style.display = "block";
+      } else {
+        discountPreview.style.display = "none";
+      }
+    }
+
+    priceInput.addEventListener("input", calculateDiscountedPrice);
+    discountRate.addEventListener("input", calculateDiscountedPrice);
+
+    document.getElementById("isDiscounted").addEventListener("change", function(e) {
+      discountField.style.display = e.target.checked ? "block" : "none";
+      if (!e.target.checked) {
+        discountPreview.style.display = "none";
+        discountRate.value = "";
+      }
+    });
+
+    // Submit form
+    document.getElementById("productForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const optionsData = [];
+      document.querySelectorAll("#optionInputs .option-row").forEach(row => {
+        const optionInput = row.querySelector(".option-input").value.trim();
+        const quantityInput = row.querySelector(".quantity-input").value;
+        if (optionInput && quantityInput) {
+          optionsData.push({ option: optionInput, quantity: parseInt(quantityInput) });
+        }
+      });
+
+      const totalStock = optionsData.reduce((sum, o) => sum + o.quantity, 0);
+
+      const product = {
+        name: document.getElementById("name").value,
+        description: document.getElementById("description").value,
+        price: parseFloat(document.getElementById("price").value),
+        category: document.getElementById("category").value,
+        subcategory: document.getElementById("subcategory").value,
+        gender: (["Clothing", "Footwear"].includes(document.getElementById("category").value))
+          ? document.getElementById("gender").value
+          : null,
+        options: optionsData,
+        totalStock,
+        isNew: document.getElementById("isNew").checked,
+        isDiscounted: document.getElementById("isDiscounted").checked,
+        discountRate: parseFloat(document.getElementById("discountRate").value) || 0,
+        discountedPrice: document.getElementById("isDiscounted").checked
+          ? parseFloat(document.getElementById("price").value) * (1 - parseFloat(document.getElementById("discountRate").value) / 100)
+          : null,
+        imageUrl: document.getElementById("imageUrl").value,
+        createdAt: new Date()
+      };
+
+      try {
+        await addDoc(collection(db, "products"), product);
+        alert("✅ Product added successfully!");
+        e.target.reset();
+        subcategorySelect.disabled = true;
+        totalStockDiv.style.display = "none";
+        discountPreview.style.display = "none";
+      } catch (error) {
+        console.error("❌ Error adding product:", error);
+        alert("Something went wrong while adding the product.");
+      }
+    });
+  </script>
+</body>
+</html>
