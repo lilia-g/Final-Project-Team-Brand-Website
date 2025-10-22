@@ -65,7 +65,21 @@ class Navigation {
         this.darkModeToggle = document.getElementById('dark-mode-toggle');
         this.themeIcon = document.getElementById('theme-icon');
         
-        this.init();
+        console.log('Navigation constructor - Elements found:', {
+            navbar: !!this.navbar,
+            navMenu: !!this.navMenu,
+            navToggle: !!this.navToggle,
+            darkModeToggle: !!this.darkModeToggle,
+            themeIcon: !!this.themeIcon
+        });
+        
+        // Only initialize if we have the required elements
+        if (this.navbar && this.darkModeToggle) {
+            console.log('Navigation: Required elements found, initializing...');
+            this.init();
+        } else {
+            console.log('Navigation: Required elements not found, skipping navigation initialization');
+        }
     }
     
     init() {
@@ -100,7 +114,10 @@ class Navigation {
     }
     
     setupMobileMenu() {
-        if (!this.navToggle || !this.navMenu) return;
+        if (!this.navToggle || !this.navMenu) {
+            console.log('Mobile menu elements not found, skipping mobile menu setup');
+            return;
+        }
         
         this.navToggle.addEventListener('click', () => {
             this.navMenu.classList.toggle('active');
@@ -129,10 +146,20 @@ class Navigation {
     }
     
     setupDarkMode() {
-        if (!this.darkModeToggle || !this.themeIcon) return;
+        if (!this.darkModeToggle || !this.themeIcon) {
+            console.log('Navigation setupDarkMode: Dark mode toggle elements not found, skipping dark mode setup');
+            return;
+        }
+        
+        console.log('Navigation setupDarkMode: Setting up dark mode toggle...');
+        
+        // Mark this button as handled to prevent conflicts with light-mode-toggle.js
+        this.darkModeToggle.setAttribute('data-handled', 'true');
         
         // Check for saved theme preference or default to light mode
         const savedTheme = localStorage.getItem('theme') || 'light';
+        console.log('Navigation setupDarkMode: Saved theme:', savedTheme);
+        
         document.body.classList.toggle('dark-mode', savedTheme === 'dark');
         this.updateThemeIcon(savedTheme);
         
@@ -140,10 +167,14 @@ class Navigation {
             const isDarkMode = document.body.classList.contains('dark-mode');
             const newTheme = isDarkMode ? 'light' : 'dark';
             
+            console.log('Navigation setupDarkMode: Toggle clicked, switching to:', newTheme);
+            
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', newTheme);
             this.updateThemeIcon(newTheme);
         });
+        
+        console.log('Navigation setupDarkMode: Dark mode setup complete');
     }
     
     updateThemeIcon(theme) {
@@ -251,23 +282,220 @@ class Navigation {
 }
 
 /* ========================================
+   HERO SLIDER COMPONENT
+   ======================================== */
+
+class HeroSlider {
+    constructor() {
+        this.slider = document.querySelector('.hero-slider');
+        this.slides = document.querySelectorAll('.slide');
+        this.dots = document.querySelectorAll('.dot');
+        
+        this.currentSlide = 0;
+        this.totalSlides = this.slides.length;
+        this.autoSlideInterval = null;
+        this.autoSlideDelay = 5000; // 5 seconds
+        this.isTransitioning = false;
+        
+        this.init();
+    }
+    
+    init() {
+        if (!this.slider || this.slides.length === 0) {
+            console.error('Hero slider elements not found!');
+            return;
+        }
+        
+        console.log('Hero slider initialized with', this.totalSlides, 'slides');
+        
+        this.setupEventListeners();
+        this.startAutoSlide();
+        this.updateSlider();
+    }
+    
+    setupEventListeners() {
+        // Dot navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                if (!this.isTransitioning) {
+                    this.goToSlide(index);
+                }
+            });
+        });
+        
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!this.isTransitioning) {
+                if (e.key === 'ArrowLeft') {
+                    this.previousSlide();
+                } else if (e.key === 'ArrowRight') {
+                    this.nextSlide();
+                }
+            }
+        });
+        
+        // Touch/swipe support
+        this.setupTouchEvents();
+        
+        // Pause auto-slide on hover
+        this.slider.addEventListener('mouseenter', () => {
+            this.stopAutoSlide();
+        });
+        
+        this.slider.addEventListener('mouseleave', () => {
+            this.startAutoSlide();
+        });
+        
+        // Pause auto-slide when page is not visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.stopAutoSlide();
+            } else {
+                this.startAutoSlide();
+            }
+        });
+    }
+    
+    setupTouchEvents() {
+        let startX = 0;
+        let startY = 0;
+        let endX = 0;
+        let endY = 0;
+        
+        this.slider.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+        
+        this.slider.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Prevent scrolling
+        });
+        
+        this.slider.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            endY = e.changedTouches[0].clientY;
+            
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            
+            // Only trigger swipe if horizontal movement is greater than vertical
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    this.previousSlide();
+                } else {
+                    this.nextSlide();
+                }
+            }
+        });
+    }
+    
+    goToSlide(slideIndex) {
+        if (slideIndex === this.currentSlide || this.isTransitioning) {
+            return;
+        }
+        
+        this.isTransitioning = true;
+        this.stopAutoSlide();
+        
+        // Remove active class from current slide and dot
+        this.slides[this.currentSlide].classList.remove('active');
+        this.dots[this.currentSlide].classList.remove('active');
+        
+        // Update current slide
+        this.currentSlide = slideIndex;
+        
+        // Add active class to new slide and dot
+        this.slides[this.currentSlide].classList.add('active');
+        this.dots[this.currentSlide].classList.add('active');
+        
+        // Reset transition flag after animation completes
+        setTimeout(() => {
+            this.isTransitioning = false;
+            this.startAutoSlide();
+        }, 800);
+        
+        console.log('Switched to slide:', this.currentSlide + 1);
+    }
+    
+    nextSlide() {
+        const nextIndex = (this.currentSlide + 1) % this.totalSlides;
+        this.goToSlide(nextIndex);
+    }
+    
+    previousSlide() {
+        const prevIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.goToSlide(prevIndex);
+    }
+    
+    startAutoSlide() {
+        this.stopAutoSlide(); // Clear any existing interval
+        
+        this.autoSlideInterval = setInterval(() => {
+            this.nextSlide();
+        }, this.autoSlideDelay);
+        
+        console.log('Auto-slide started');
+    }
+    
+    stopAutoSlide() {
+        if (this.autoSlideInterval) {
+            clearInterval(this.autoSlideInterval);
+            this.autoSlideInterval = null;
+            console.log('Auto-slide stopped');
+        }
+    }
+    
+    updateSlider() {
+        // Ensure only the current slide is active
+        this.slides.forEach((slide, index) => {
+            slide.classList.toggle('active', index === this.currentSlide);
+        });
+        
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentSlide);
+        });
+    }
+    
+    // Public method to manually control the slider
+    pause() {
+        this.stopAutoSlide();
+    }
+    
+    resume() {
+        this.startAutoSlide();
+    }
+    
+    // Method to get current slide info
+    getCurrentSlideInfo() {
+        return {
+            current: this.currentSlide + 1,
+            total: this.totalSlides,
+            isAutoPlaying: this.autoSlideInterval !== null
+        };
+    }
+}
+
+/* ========================================
    INITIALIZATION
    ======================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initializing components...');
+    console.log('Main.js: DOM loaded, initializing components...');
     new Navigation();
     new BackToTopButton();
-    console.log('All components initialized');
+    new HeroSlider();
+    console.log('Main.js: All components initialized');
 });
 
 // Also try to initialize immediately if DOM is already loaded
 if (document.readyState === 'loading') {
     // DOM is still loading, wait for DOMContentLoaded
-    console.log('DOM is loading, waiting for DOMContentLoaded');
+    console.log('Main.js: DOM is loading, waiting for DOMContentLoaded');
 } else {
     // DOM is already loaded, initialize immediately
-    console.log('DOM already loaded, initializing immediately');
+    console.log('Main.js: DOM already loaded, initializing immediately');
     new Navigation();
     new BackToTopButton();
+    new HeroSlider();
 }

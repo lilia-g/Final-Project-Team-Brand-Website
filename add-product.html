@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KickStart | Add Product</title>
+  
+  <link rel="shortcut icon" href="images/falcone.png" type="faclcone-kickstart">
+  <!-- Main Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+        <!-- Logo Section -->
+        <div class="nav-logo">
+            <a href="index.html" class="logo-text">Kickstart Admin Dashboard</a>
+        </div>
+            
+            <!-- Right Section with Icons -->
+            <div class="nav-actions">
+                <button class="nav-icon-btn" id="dark-mode-toggle" aria-label="Toggle dark mode">
+                    <svg class="nav-icon" id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                </button>
+                
+                <button class="nav-icon-btn" aria-label="User login">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+  </header>
+  <main class="admin-main">
+    <div class="admin-container">
+      <form id="productForm" class="admin-form">
+        <h2 class="form-title">Add New Product</h2>
+
+        <div class="form-group">
+          <label class="form-label">Product Name</label>
+          <input type="text" id="name" class="form-input" placeholder="Enter product name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea id="description" class="form-textarea" placeholder="Enter product description" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Price</label>
+          <input type="number" id="price" class="form-input" placeholder="Enter price" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select id="category" class="form-select" required>
+            <option value="">Select Category</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Footwear">Footwear</option>
+            <option value="Gym & Fitness Gear">Gym & Fitness Gear</option>
+            <option value="Sports Equipment">Sports Equipment</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Subcategory</label>
+          <select id="subcategory" class="form-select" disabled required>
+            <option value="">Select Subcategory</option>
+          </select>
+        </div>
+
+        <div id="genderField" class="form-group" style="display: none;">
+          <label class="form-label">Gender</label>
+          <select id="gender" class="form-select">
+            <option value="">Select Gender</option>
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Both">Both</option>
+          </select>
+        </div>
+
+        <!-- Universal Option Field -->
+        <div id="optionField" class="form-group">
+          <label class="form-label">Options & Quantities</label>
+          <div id="optionInputs">
+            <div class="option-row">
+              <input type="text" placeholder="Option (e.g. M, 5kg, 120cm)" class="option-input form-input">
+              <input type="number" placeholder="Quantity" class="quantity-input form-input" min="0">
+              <button type="button" class="remove-btn" onclick="removeOptionRow(this)">Remove</button>
+            </div>
+          </div>
+          <button type="button" onclick="addOptionRow()" class="add-option-btn">Add Option</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Image URL</label>
+          <input type="text" id="imageUrl" class="form-input" placeholder="Enter image URL" required>
+        </div>
+
+        <div class="form-group">
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="isNew" class="form-checkbox">
+              <span class="checkbox-text">New Product</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="isDiscounted" class="form-checkbox">
+              <span class="checkbox-text">Discounted</span>
+            </label>
+          </div>
+          
+          <div id="discountField" class="discount-field" style="display: none;">
+            <label class="form-label">Discount Rate (%)</label>
+            <input type="number" id="discountRate" class="form-input" placeholder="Enter discount percentage" min="0" max="100" step="0.01">
+            <div id="discountPreview" class="discount-preview">
+              <strong>Price After Discount: $<span id="discountedPrice">0.00</span></strong>
+            </div>
+          </div>
+        </div>
+
+        <div id="totalStock" class="total-stock">
+          <strong>Total Items in Stock: <span id="totalStockCount">0</span></strong>
+        </div>
+
+        <button type="submit" class="submit-btn">Add Product</button>
+      </form>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA4U5Yd3tVKYs-bH6cEoXPy3doKromm1hU",
+      authDomain: "test1-ef56d.firebaseapp.com",
+      projectId: "test1-ef56d",
+      storageBucket: "test1-ef56d.firebasestorage.app",
+      messagingSenderId: "767603614507",
+      appId: "1:767603614507:web:4ee8e36ec3e963a1089b6e",
+      measurementId: "G-DVFHE3KH98"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const subcategories = {
+      "Clothing": ["T-shirts", "Shorts", "Track Pants", "Hoodies", "Jackets", "Leggings", "Sports Bras", "Tops", "Tank Tops", "Sweatshirts", "Tracksuits", "Sports Shirts", "Polo Shirts", "Athletic Shorts", "Boxing Gloves", "Gloves"],
+      "Footwear": ["Running Shoes", "Training Shoes", "Football Boots", "Basketball Shoes", "Hiking Boots", "Sneakers"],
+      "Gym & Fitness Gear": ["Dumbbells", "Kettlebells", "Barbells", "Weight Plates", "Medicine Balls", "Resistance Bands", "Yoga Mats", "Jump Ropes", "Gym Bags", "Foam Rollers"],
+      "Sports Equipment": ["Footballs", "Basketballs", "Volleyballs", "Tennis Rackets", "Badminton Rackets", "Shuttlecocks", "Skipping Ropes"]
+    };
+
+    const categorySelect = document.getElementById("category");
+    const subcategorySelect = document.getElementById("subcategory");
+    const genderField = document.getElementById("genderField");
+    const discountField = document.getElementById("discountField");
+    const discountRate = document.getElementById("discountRate");
+    const priceInput = document.getElementById("price");
+    const discountPreview = document.getElementById("discountPreview");
+    const discountedPriceSpan = document.getElementById("discountedPrice");
+    const totalStockDiv = document.getElementById("totalStock");
+    const totalStockCount = document.getElementById("totalStockCount");
+
+    categorySelect.addEventListener("change", () => {
+      const selectedCategory = categorySelect.value;
+      subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+      subcategorySelect.disabled = true;
+      genderField.style.display = "none";
+
+      if (selectedCategory && subcategories[selectedCategory]) {
+        subcategorySelect.disabled = false;
+        subcategories[selectedCategory].forEach(sub => {
+          const option = document.createElement("option");
+          option.value = sub;
+          option.textContent = sub;
+          subcategorySelect.appendChild(option);
+        });
+
+        if (selectedCategory === "Clothing" || selectedCategory === "Footwear") {
+          genderField.style.display = "block";
+        }
+      }
+    });
+
+    // Add/remove rows
+    window.addOptionRow = function() {
+      const container = document.getElementById("optionInputs");
+      const row = document.createElement("div");
+      row.className = "option-row";
+      row.innerHTML = `
+        <input type="text" placeholder="Option (e.g. M, 5kg, 120cm)" class="option-input form-input">
+        <input type="number" placeholder="Quantity" class="quantity-input form-input" min="0" onchange="calculateTotalStock()">
+        <button type="button" class="remove-btn" onclick="removeOptionRow(this)">Remove</button>
+      `;
+      container.appendChild(row);
+    };
+
+    window.removeOptionRow = function(button) {
+      button.parentElement.remove();
+      calculateTotalStock();
+    };
+
+    // Stock calculation
+    window.calculateTotalStock = function() {
+      let total = 0;
+      document.querySelectorAll(".quantity-input").forEach(input => {
+        total += parseInt(input.value) || 0;
+      });
+      totalStockCount.textContent = total;
+      totalStockDiv.style.display = total > 0 ? "block" : "none";
+    };
+
+    // Discount calculation
+    function calculateDiscountedPrice() {
+      const price = parseFloat(priceInput.value) || 0;
+      const discount = parseFloat(discountRate.value) || 0;
+      if (price > 0 && discount > 0) {
+        const discountedPrice = price * (1 - discount / 100);
+        discountedPriceSpan.textContent = discountedPrice.toFixed(2);
+        discountPreview.style.display = "block";
+      } else {
+        discountPreview.style.display = "none";
+      }
+    }
+
+    priceInput.addEventListener("input", calculateDiscountedPrice);
+    discountRate.addEventListener("input", calculateDiscountedPrice);
+
+    document.getElementById("isDiscounted").addEventListener("change", function(e) {
+      discountField.style.display = e.target.checked ? "block" : "none";
+      if (!e.target.checked) {
+        discountPreview.style.display = "none";
+        discountRate.value = "";
+      }
+    });
+
+    // Submit form
+    document.getElementById("productForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const optionsData = [];
+      document.querySelectorAll("#optionInputs .option-row").forEach(row => {
+        const optionInput = row.querySelector(".option-input").value.trim();
+        const quantityInput = row.querySelector(".quantity-input").value;
+        if (optionInput && quantityInput) {
+          optionsData.push({ option: optionInput, quantity: parseInt(quantityInput) });
+        }
+      });
+
+      const totalStock = optionsData.reduce((sum, o) => sum + o.quantity, 0);
+
+      const product = {
+        name: document.getElementById("name").value,
+        description: document.getElementById("description").value,
+        price: parseFloat(document.getElementById("price").value),
+        category: document.getElementById("category").value,
+        subcategory: document.getElementById("subcategory").value,
+        gender: (["Clothing", "Footwear"].includes(document.getElementById("category").value))
+          ? document.getElementById("gender").value
+          : null,
+        options: optionsData,
+        totalStock,
+        isNew: document.getElementById("isNew").checked,
+        isDiscounted: document.getElementById("isDiscounted").checked,
+        discountRate: parseFloat(document.getElementById("discountRate").value) || 0,
+        discountedPrice: document.getElementById("isDiscounted").checked
+          ? parseFloat(document.getElementById("price").value) * (1 - parseFloat(document.getElementById("discountRate").value) / 100)
+          : null,
+        imageUrl: document.getElementById("imageUrl").value,
+        createdAt: new Date()
+      };
+
+      try {
+        await addDoc(collection(db, "products"), product);
+        alert("✅ Product added successfully!");
+        e.target.reset();
+        subcategorySelect.disabled = true;
+        totalStockDiv.style.display = "none";
+        discountPreview.style.display = "none";
+      } catch (error) {
+        console.error("❌ Error adding product:", error);
+        alert("Something went wrong while adding the product.");
+      }
+    });
+  </script>
+  
+  <!-- Load navigation and dark mode scripts after Firebase -->
+  <script src="js/main.js"></script>
+  <script src="js/light-mode-toggle.js"></script>
+  
+  <!-- Ensure dark mode is applied on page load -->
+  <script>
+    // Apply saved theme immediately when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+      
+      // Update theme icon
+      const themeIcon = document.getElementById('theme-icon');
+      if (themeIcon) {
+        if (savedTheme === 'dark') {
+          themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+        } else {
+          themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
