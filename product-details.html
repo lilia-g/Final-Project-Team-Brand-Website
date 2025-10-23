@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Kickstart</title>
+
+    <link rel="shortcut icon" href="images/falcone.png" type="faclcone-kickstart">
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+        <!-- Logo Section -->
+        <div class="nav-logo">
+            <a href="index.html" class="logo-text">Kickstart</a>
+        </div>
+            
+            <!-- Navigation Menu -->
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="Products.html" class="nav-link">Product</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="get-started.html" class="nav-link nav-cta">Get Started</a>
+            </div>
+            
+            <!-- Right Section with All 4 Icons -->
+            <div class="nav-actions">
+                <button class="nav-icon-btn" id="dark-mode-toggle" aria-label="Toggle dark mode">
+                    <svg class="nav-icon" id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                </button>
+                
+                <a href="cart.html" class="nav-icon-btn" aria-label="Shopping cart">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    <span class="cart-badge" id="cart-badge">0</span>
+                </a>
+                
+                <button class="nav-icon-btn" aria-label="User login">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </button>
+                
+                <!-- Mobile Menu Toggle -->
+                <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu">
+                    <span class="hamburger"></span>
+                    <span class="hamburger"></span>
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+   
+  </header>
+  
+  <main class="product-details-main">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-separator">></span>
+        <a href="Products.html">Products</a>
+        <span class="breadcrumb-separator">></span>
+        <span id="breadcrumb-product" class="breadcrumb-current">Product Details</span>
+      </div>
+    </div>
+
+    <!-- Product Details Section -->
+    <section class="product-details-section">
+      <div class="product-details-container">
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+          <div class="loading-spinner"></div>
+          <p>Loading product details...</p>
+        </div>
+
+        <!-- Product Not Found State -->
+        <div id="notFoundState" class="not-found-state" style="display: none;">
+          <svg class="not-found-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          <h3>Product Not Found</h3>
+          <p>The product you're looking for doesn't exist or has been removed.</p>
+          <a href="Products.html" class="btn-primary">Back to Products</a>
+        </div>
+
+        <!-- Product Details Content -->
+        <div id="productDetailsContent" class="product-details-content" style="display: none;">
+          <!-- Product Image -->
+          <div class="product-image-section">
+            <div class="product-main-image">
+              <img id="productMainImage" src="" alt="Product Image" />
+              <div class="product-tags">
+                <span id="productNewTag" class="product-tag new-tag" style="display: none;">NEW</span>
+                <span id="productDiscountTag" class="product-tag discount-tag" style="display: none;"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Information -->
+          <div class="product-info-section">
+            <div class="product-header">
+              <h1 id="productName" class="product-name"></h1>
+              <p id="productCategory" class="product-category"></p>
+            </div>
+
+            <div class="product-price-section">
+              <div id="productPrice" class="product-price"></div>
+            </div>
+
+            <div class="product-description">
+              <h3>Description</h3>
+              <p id="productDescription"></p>
+            </div>
+
+            <!-- Product Options -->
+            <div id="productOptionsSection" class="product-options-section" style="display: none;">
+              <h3>Options</h3>
+              <div id="productOptions" class="product-options"></div>
+            </div>
+
+            <!-- Quantity Selection -->
+            <div class="quantity-section">
+              <h3>Quantity</h3>
+              <div class="quantity-controls">
+                <button class="quantity-btn" id="decreaseQuantity">-</button>
+                <input type="number" id="quantityInput" value="1" min="1" max="99" class="quantity-input">
+                <button class="quantity-btn" id="increaseQuantity">+</button>
+              </div>
+            </div>
+
+            <!-- Stock Information -->
+            <div class="stock-section">
+              <p id="stockInfo" class="stock-info"></p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="product-actions">
+              <button id="addToCartBtn" class="add-to-cart-btn">
+                <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                Add to Cart
+              </button>
+            </div>
+
+            <!-- Product Features -->
+            <div class="product-features">
+              <h3>Features</h3>
+              <ul id="productFeatures" class="features-list"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <!-- Main Footer Section -->
+    <div class="footer-main">
+        <div class="footer-container">
+            <!-- Section 1: Logo and Description -->
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <a href="index.html" class="footer-logo-text">Kickstart</a>
+                </div>
+                <p class="footer-description">
+                    Move faster  Train harder <br>
+                    Play smarter<strong> Kickstart</strong>  your journey
+                </p>
+            </div>
+            
+            <!-- Section 2: Pages -->
+            <div class="footer-section">
+                <h3 class="footer-title">Pages</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html" class="footer-link">Home</a></li>
+                    <li><a href="Products.html" class="footer-link">Products</a></li>
+                    <li><a href="about.html" class="footer-link">About Us</a></li>
+                    <li><a href="contact.html" class="footer-link">Contact</a></li>
+                    <li><a href="get-started.html" class="footer-link">Get Started</a></li>
+                </ul>
+            </div>
+            
+            <!-- Section 3: Legal Links -->
+            <div class="footer-section">
+                <h3 class="footer-title">Useful Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#" class="footer-link">Terms of Service</a></li>
+                    <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                    <li><a href="#" class="footer-link">Cookie Policy</a></li>
+                    <li><a href="#" class="footer-link">Refund Policy</a></li>
+                  
+                </ul>
+            </div>
+            
+            <!-- Section 4: Contact & Newsletter -->
+            <div class="footer-section">
+                <h3 class="footer-title">Contact Us</h3>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <!-- Newsletter Section -->
+                <div class="newsletter">
+                    <h4 class="newsletter-title">Stay Updated</h4>
+                    <p class="newsletter-text">Subscribe to our newsletter for the latest updates</p>
+                    <div class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Enter your email" required>
+                        <button class="newsletter-btn" type="submit">
+                            <svg class="send-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Copyright Section -->
+    <div class="footer-copyright">
+       
+            <p class="copyright-text">
+                © 2024 Kickstart. All rights reserved.
+            </p>
+       
+    </div>
+</footer>
+
+<!-- Back to Top Button -->
+<button id="back-to-top" class="back-to-top-btn" aria-label="Back to top">
+    <svg class="back-to-top-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 15l-6-6-6 6"/>
+    </svg>
+</button>
+
+<script src="js/light-mode-toggle.js"></script>
+<script src="js/main.js"></script>
+
+<!-- Product Details Script -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA4U5Yd3tVKYs-bH6cEoXPy3doKromm1hU",
+    authDomain: "test1-ef56d.firebaseapp.com",
+    projectId: "test1-ef56d",
+    storageBucket: "test1-ef56d.firebasestorage.app",
+    messagingSenderId: "767603614507",
+    appId: "1:767603614507:web:4ee8e36ec3e963a1089b6e",
+    measurementId: "G-DVFHE3KH98"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Cart functionality
+  class Cart {
+    constructor() {
+      this.items = this.loadFromStorage();
+      this.updateCartBadge();
+    }
+
+    loadFromStorage() {
+      const stored = localStorage.getItem('kickstart_cart');
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    saveToStorage() {
+      localStorage.setItem('kickstart_cart', JSON.stringify(this.items));
+      this.updateCartBadge();
+    }
+
+    addItem(product, quantity = 1, selectedOptions = {}) {
+      const existingItem = this.items.find(item => 
+        item.id === product.id && 
+        JSON.stringify(item.selectedOptions) === JSON.stringify(selectedOptions)
+      );
+
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        this.items.push({
+          id: product.id,
+          name: product.name,
+          price: product.isDiscounted ? product.discountedPrice : product.price,
+          originalPrice: product.price,
+          imageUrl: product.imageUrl,
+          category: product.category,
+          subcategory: product.subcategory,
+          quantity: quantity,
+          selectedOptions: selectedOptions,
+          isDiscounted: product.isDiscounted,
+          discountRate: product.discountRate
+        });
+      }
+      this.saveToStorage();
+    }
+
+    removeItem(itemId, selectedOptions = {}) {
+      this.items = this.items.filter(item => 
+        !(item.id === itemId && JSON.stringify(item.selectedOptions) === JSON.stringify(selectedOptions))
+      );
+      this.saveToStorage();
+    }
+
+    updateQuantity(itemId, quantity, selectedOptions = {}) {
+      const item = this.items.find(item => 
+        item.id === itemId && 
+        JSON.stringify(item.selectedOptions) === JSON.stringify(selectedOptions)
+      );
+      if (item) {
+        if (quantity <= 0) {
+          this.removeItem(itemId, selectedOptions);
+        } else {
+          item.quantity = quantity;
+          this.saveToStorage();
+        }
+      }
+    }
+
+    getTotalItems() {
+      return this.items.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    getTotalPrice() {
+      return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    }
+
+    clear() {
+      this.items = [];
+      this.saveToStorage();
+    }
+
+    updateCartBadge() {
+      const badge = document.getElementById('cart-badge');
+      if (badge) {
+        const count = this.getTotalItems();
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'block' : 'none';
+      }
+    }
+  }
+
+  // Initialize cart
+  const cart = new Cart();
+
+  // Get product ID from URL
+  function getProductIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+  }
+
+  // Load product details
+  async function loadProductDetails() {
+    const productId = getProductIdFromUrl();
+    
+    if (!productId) {
+      showNotFound();
+      return;
+    }
+
+    try {
+      const productRef = doc(db, "products", productId);
+      const productSnap = await getDoc(productRef);
+      
+      if (productSnap.exists()) {
+        const product = { id: productSnap.id, ...productSnap.data() };
+        displayProductDetails(product);
+      } else {
+        showNotFound();
+      }
+    } catch (error) {
+      console.error("Error loading product:", error);
+      showNotFound();
+    }
+  }
+
+  // Display product details
+  function displayProductDetails(product) {
+    // Hide loading state
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('productDetailsContent').style.display = 'block';
+
+    // Update breadcrumb
+    document.getElementById('breadcrumb-product').textContent = product.name;
+
+    // Update product image
+    const mainImage = document.getElementById('productMainImage');
+    mainImage.src = product.imageUrl;
+    mainImage.alt = product.name;
+    mainImage.onerror = function() { this.src = 'images/p1.jpg'; }
+
+    // Update product tags
+    if (product.isNew) {
+      document.getElementById('productNewTag').style.display = 'block';
+    }
+    if (product.isDiscounted) {
+      const discountTag = document.getElementById('productDiscountTag');
+      discountTag.textContent = `-${product.discountRate}%`;
+      discountTag.style.display = 'block';
+    }
+
+    // Update product info
+    document.getElementById('productName').textContent = product.name;
+    document.getElementById('productCategory').textContent = `${product.category} • ${product.subcategory}`;
+    document.getElementById('productDescription').textContent = product.description || 'No description available.';
+
+    // Update price
+    const priceElement = document.getElementById('productPrice');
+    if (product.isDiscounted) {
+      priceElement.innerHTML = `
+        <span class="original-price">$${product.price.toFixed(2)}</span>
+        <span class="discounted-price">$${product.discountedPrice.toFixed(2)}</span>
+      `;
+    } else {
+      priceElement.innerHTML = `<span class="current-price">$${product.price.toFixed(2)}</span>`;
+    }
+
+    // Update options
+    if (product.options && product.options.length > 0) {
+      const optionsSection = document.getElementById('productOptionsSection');
+      const optionsContainer = document.getElementById('productOptions');
+      
+      optionsSection.style.display = 'block';
+      optionsContainer.innerHTML = product.options.map(opt => `
+        <button class="option-btn" data-option="${opt.option}" data-quantity="${opt.quantity}">
+          ${opt.option} (${opt.quantity} available)
+        </button>
+      `).join('');
+
+      // Add click handlers for options
+      optionsContainer.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active class from all buttons
+          optionsContainer.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
+          // Add active class to clicked button
+          this.classList.add('active');
+        });
+      });
+    }
+
+    // Update stock info
+    const totalStock = product.options ? 
+      product.options.reduce((total, opt) => total + opt.quantity, 0) : 
+      (product.stock || 0);
+    
+    document.getElementById('stockInfo').textContent = `${totalStock} items in stock`;
+
+    // Update features
+    const featuresList = document.getElementById('productFeatures');
+    if (product.features && product.features.length > 0) {
+      featuresList.innerHTML = product.features.map(feature => `<li>${feature}</li>`).join('');
+    } else {
+      featuresList.innerHTML = '<li>High quality materials</li><li>Durable construction</li><li>Comfortable design</li>';
+    }
+
+    // Setup quantity controls
+    setupQuantityControls();
+
+    // Setup action buttons
+    setupActionButtons(product);
+  }
+
+  // Setup quantity controls
+  function setupQuantityControls() {
+    const decreaseBtn = document.getElementById('decreaseQuantity');
+    const increaseBtn = document.getElementById('increaseQuantity');
+    const quantityInput = document.getElementById('quantityInput');
+
+    decreaseBtn.addEventListener('click', () => {
+      const currentValue = parseInt(quantityInput.value);
+      if (currentValue > 1) {
+        quantityInput.value = currentValue - 1;
+      }
+    });
+
+    increaseBtn.addEventListener('click', () => {
+      const currentValue = parseInt(quantityInput.value);
+      const maxValue = parseInt(quantityInput.max);
+      if (currentValue < maxValue) {
+        quantityInput.value = currentValue + 1;
+      }
+    });
+
+    quantityInput.addEventListener('change', () => {
+      const value = parseInt(quantityInput.value);
+      const min = parseInt(quantityInput.min);
+      const max = parseInt(quantityInput.max);
+      
+      if (value < min) quantityInput.value = min;
+      if (value > max) quantityInput.value = max;
+    });
+  }
+
+  // Setup action buttons
+  function setupActionButtons(product) {
+    const addToCartBtn = document.getElementById('addToCartBtn');
+
+    addToCartBtn.addEventListener('click', () => {
+      const quantity = parseInt(document.getElementById('quantityInput').value);
+      const selectedOptions = getSelectedOptions();
+      
+      cart.addItem(product, quantity, selectedOptions);
+      
+      // Show success message
+      showMessage('Product added to cart!', 'success');
+    });
+  }
+
+  // Get selected options
+  function getSelectedOptions() {
+    const selectedOptions = {};
+    const activeOption = document.querySelector('.option-btn.active');
+    
+    if (activeOption) {
+      selectedOptions.option = activeOption.dataset.option;
+      selectedOptions.quantity = parseInt(activeOption.dataset.quantity);
+    }
+    
+    return selectedOptions;
+  }
+
+  // Show not found state
+  function showNotFound() {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('notFoundState').style.display = 'block';
+  }
+
+  // Show message
+  function showMessage(text, type = 'info') {
+    const message = document.createElement('div');
+    message.className = `message message-${type}`;
+    message.textContent = text;
+    
+    document.body.appendChild(message);
+    
+    setTimeout(() => {
+      message.remove();
+    }, 3000);
+  }
+
+  // Initialize page
+  document.addEventListener('DOMContentLoaded', () => {
+    loadProductDetails();
+  });
+
+  // Footer Scroll to Top Script
+  document.addEventListener('DOMContentLoaded', function() {
+      const footerLogo = document.querySelector('.footer-logo-text');
+      
+      if (footerLogo) {
+          footerLogo.addEventListener('click', function(e) {
+              e.preventDefault();
+              window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth'
+              });
+          });
+      }
+      
+      // Direct Back to Top button handler as backup
+      const backToTopBtn = document.getElementById('back-to-top');
+      if (backToTopBtn) {
+          backToTopBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+              window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth'
+              });
+          });
+      }
+  });
+</script>
+</body>
+</html>
