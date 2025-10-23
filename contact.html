@@ -8,11 +8,13 @@
 </head>
 <body>
   <header>
-    <img src="https://cdn-icons-png.flaticon.com/512/807/807241.png" alt="KickStart Logo">
+    <!-- KickStart Logo -->
+    <img src="KickStart_logo.png" alt="KickStart Logo" class="logo">
     <h1>Contact Us</h1>
     <p>We’re here to help you get started!</p>
   </header>
 
+  <!-- Image Banner -->
   <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b" 
        alt="Contact KickStart" 
        style="width:100%; border-radius:10px; margin-top:20px;">
@@ -43,7 +45,7 @@
   </footer>
 
   <script>
-  // Confirmation alert for contact form
+  // Confirmation popup for contact form
   document.getElementById("contactForm").addEventListener("submit", function(event){
     event.preventDefault();
     alert("✅ Thank you for contacting KickStart! We'll get back to you soon.");
