@@ -845,3 +845,129 @@ main {
         height: 16px;
     }
 }
+
+/* KickStart Website Theme: Orange & Black */
+
+/* General Page Setup */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background-color: #f8f8f8;
+  color: #222;
+}
+
+/* Header Section */
+header {
+  background: linear-gradient(135deg, #ff6600, #000000);
+  color: white;
+  text-align: center;
+  padding: 50px 20px;
+  border-bottom: 5px solid #ff6600;
+}
+
+header h1 {
+  font-size: 2.5em;
+  margin: 0;
+}
+
+header p {
+  font-size: 1.2em;
+  margin-top: 10px;
+  color: #ffe9d6;
+}
+
+/* Logo */
+.logo {
+  width: 120px;
+  height: auto;
+  border-radius: 50%;
+  border: 3px solid white;
+  margin-bottom: 10px;
+}
+
+/* Section Styles */
+section {
+  padding: 30px 20px;
+  max-width: 900px;
+  margin: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 25px;
+}
+
+h2 {
+  color: #ff6600;
+  border-left: 5px solid #000;
+  padding-left: 10px;
+}
+
+/* List Style */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #fff4e6;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+/* Contact Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input, textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+button {
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #000;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #000;
+  color: white;
+  font-size: 0.9em;
+}
+
+a {
+  color: #ff6600;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.8em;
+  }
+  section {
+    padding: 20px 15px;
+  }
+}
