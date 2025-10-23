@@ -1,257 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kickstart — Get Started</title>
+<script>
+  // Improved Modal Script
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('myModal');
+    const btn = document.getElementById('myBtn');
+    const span = document.getElementsByClassName('close')[0];
 
-    <link rel="shortcut icon" href="images/falcone.png" type="image/png">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/theme.css">
-    <style>
-      /* HERO SECTION OVERRIDE */
-      .hero {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          padding: 6rem 2rem 4rem;
-          background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
-      }
-      .hero-content h1 {
-          font-size: 2.5rem;
-          color: #FF6600; /* Orange accent */
-          margin-bottom: 1rem;
-      }
-      .hero-content p {
-          font-size: 1.2rem;
-          margin-bottom: 2rem;
-          color: #333;
-      }
-      .hero .actions {
-          display: flex;
-          gap: 1rem;
-          flex-wrap: wrap;
-          justify-content: center;
-      }
-      .illu {
-          margin-top: 3rem;
-      }
-      .illu svg {
-          max-width: 300px;
-          width: 100%;
-          height: auto;
-      }
-      /* Inspiration grid */
-      .insp-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-          gap: 1.5rem;
-          margin-top: 3rem;
-      }
-      .inspo {
-          background-size: cover;
-          background-position: center;
-          padding: 2rem;
-          border-radius: 12px;
-          color: #fff;
-          text-shadow: 0 1px 5px rgba(0,0,0,0.6);
-          transition: transform 0.3s ease;
-      }
-      .inspo:hover {
-          transform: translateY(-5px);
-      }
-      .modal-backdrop {
-          display: none;
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.5);
-          justify-content: center;
-          align-items: center;
-          z-index: 1000;
-      }
-      .modal {
-          background: #fff;
-          padding: 2rem;
-          border-radius: 10px;
-          width: 90%;
-          max-width: 500px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      }
-      .modal-actions {
-          margin-top: 1.5rem;
-          display: flex;
-          justify-content: flex-end;
-          gap: 1rem;
-      }
-      @media (min-width:768px){
-          .hero {
-              flex-direction: row;
-              justify-content: space-between;
-              text-align: left;
-              padding: 8rem 4rem 6rem;
-          }
-          .illu {
-              margin-top: 0;
-          }
-      }
-    </style>
-</head>
-<body>
-  <!-- HEADER -->
-  <header>
-    <nav class="navbar" id="navbar">
-      <div class="nav-container">
-        <div class="nav-logo">
-          <a href="index.html" class="logo-text">Kickstart</a>
-        </div>
-        <div class="nav-menu" id="nav-menu">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="Products.html" class="nav-link">Product</a>
-          <a href="about.html" class="nav-link">About</a>
-          <a href="contact.html" class="nav-link">Contact</a>
-          <a href="get-started.html" class="nav-link nav-cta">Get Started</a>
-        </div>
-        <div class="nav-actions">
-          <button class="nav-icon-btn" id="dark-mode-toggle" aria-label="Toggle dark mode">
-            <svg class="nav-icon" id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5"/>
-              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-            </svg>
-          </button>
-          <button class="nav-icon-btn" aria-label="Shopping cart">
-            <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="9" cy="21" r="1"/>
-              <circle cx="20" cy="21" r="1"/>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-            </svg>
-          </button>
-          <button class="nav-icon-btn" aria-label="User login">
-            <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-          </button>
-          <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu">
-            <span class="hamburger"></span>
-            <span class="hamburger"></span>
-            <span class="hamburger"></span>
-          </button>
-        </div>
-      </div>
-    </nav>
-  </header>
+    btn.onclick = function() {
+      modal.style.display = 'block';
+    }
 
-  <!-- MAIN HERO -->
-  <main class="hero section">
-    <div class="hero-content">
-      <h1>Kickstart Your Journey</h1>
-      <p>Build your personalized training plan, explore sports, and track your progress with Kickstart.</p>
-      <div class="actions">
-        <button class="btn btn-primary" id="openModal">Create Plan</button>
-        <a href="Products.html" class="btn btn-ghost">Explore Products</a>
-      </div>
-    </div>
-    <div class="illu">
-      <svg viewBox="0 0 220 220">
-        <circle cx="110" cy="110" r="100" stroke="#FF6600" stroke-width="6" fill="none"/>
-      </svg>
-    </div>
-
-    <!-- Inspiration Section -->
-    <section>
-      <h2 class="reveal">Inspiration</h2>
-      <div class="insp-grid">
-        <div class="inspo" style="background-image:url('images/inspo1.jpg')">
-          <h3>Discipline</h3>
-          <p>Stay consistent</p>
-        </div>
-        <div class="inspo" style="background-image:url('images/inspo2.jpg')">
-          <h3>Growth</h3>
-          <p>Track your progress</p>
-        </div>
-        <div class="inspo" style="background-image:url('images/inspo3.jpg')">
-          <h3>Community</h3>
-          <p>Learn from others</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Modal -->
-    <div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="modal" role="document" aria-labelledby="modalTitle">
-        <h2 id="modalTitle">Build Your Plan</h2>
-        <form id="planForm">
-          <div class="form-grid">
-            <label for="sport">Sport</label>
-            <select id="sport" required>
-              <option value="">Select sport</option>
-              <option value="football">Football</option>
-              <option value="basketball">Basketball</option>
-              <option value="handball">Handball</option>
-            </select>
-            <label for="duration">Duration (weeks)</label>
-            <input type="number" id="duration" min="1" max="52" value="4" required>
-          </div>
-          <div class="modal-actions">
-            <button type="button" class="btn btn-ghost" id="closeModal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Generate</button>
-          </div>
-        </form>
-        <div id="planPreview"></div>
-      </div>
-    </div>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <!-- Existing footer code remains here -->
-  </footer>
-
-  <!-- Back to Top -->
-  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to top">
-    <svg class="back-to-top-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M18 15l-6-6-6 6"/>
-    </svg>
-  </button>
-
-  <!-- SCRIPTS -->
-  <script src="js/light-mode-toggle.js"></script>
-  <script src="js/main.js"></script>
-  <script>
-    // Modal functionality
-    const modal = document.getElementById('modal');
-    const openModalBtn = document.getElementById('openModal');
-    const closeModalBtn = document.getElementById('closeModal');
-    const planForm = document.getElementById('planForm');
-    const planPreview = document.getElementById('planPreview');
-
-    openModalBtn.addEventListener('click', () => {
-      modal.style.display = 'grid';
-      modal.setAttribute('aria-hidden', 'false');
-      document.getElementById('sport').focus();
-    });
-
-    closeModalBtn.addEventListener('click', () => {
+    span.onclick = function() {
       modal.style.display = 'none';
-      modal.setAttribute('aria-hidden', 'true');
-      planPreview.innerHTML = '';
-    });
+    }
 
-    modal.addEventListener('click', e => {
-      if(e.target === modal){
+    window.onclick = function(event) {
+      if (event.target == modal) {
         modal.style.display = 'none';
-        modal.setAttribute('aria-hidden','true');
-        planPreview.innerHTML = '';
       }
-    });
+    }
+  });
+</script>
 
-    planForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const sport = document.getElementById('sport').value;
-      const duration = document.getElementById('duration').value;
-      planPreview.innerHTML = `<p>Your ${duration}-week ${sport} training plan has been generated! 🚀</p>`;
-    });
-  </script>
-</body>
-</html>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Your modal content goes here.</p>
+  </div>
+</div>
+
+<button id="myBtn">Open Modal</button>
