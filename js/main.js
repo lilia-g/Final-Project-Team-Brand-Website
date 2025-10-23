@@ -477,6 +477,45 @@ class HeroSlider {
 }
 
 /* ========================================
+   CART BADGE INITIALIZATION
+   ======================================== */
+
+class CartBadge {
+    constructor() {
+        this.badge = document.getElementById('cart-badge');
+        this.init();
+    }
+    
+    init() {
+        if (!this.badge) {
+            console.log('Cart badge not found, skipping initialization');
+            return;
+        }
+        
+        this.updateBadge();
+        console.log('Cart badge initialized');
+    }
+    
+    updateBadge() {
+        if (!this.badge) return;
+        
+        const cartItems = this.getCartItems();
+        const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+        
+        this.badge.textContent = totalItems;
+        this.badge.style.display = totalItems > 0 ? 'block' : 'none';
+    }
+    
+    getCartItems() {
+        const stored = localStorage.getItem('kickstart_cart');
+        return stored ? JSON.parse(stored) : [];
+    }
+}
+
+// Global CartBadge instance for contact page
+window.CartBadge = CartBadge;
+
+/* ========================================
    INITIALIZATION
    ======================================== */
 
@@ -485,6 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new Navigation();
     new BackToTopButton();
     new HeroSlider();
+    new CartBadge();
     console.log('Main.js: All components initialized');
 });
 
@@ -498,4 +538,5 @@ if (document.readyState === 'loading') {
     new Navigation();
     new BackToTopButton();
     new HeroSlider();
+    new CartBadge();
 }

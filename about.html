@@ -37,12 +37,13 @@
                     </svg>
                 </button>
                 
-                <button class="nav-icon-btn" aria-label="Shopping cart">
+                <button class="nav-icon-btn" id="cart-toggle" aria-label="Shopping cart">
                     <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="9" cy="21" r="1"/>
                         <circle cx="20" cy="21" r="1"/>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                     </svg>
+                    <span class="cart-badge" id="cart-badge">0</span>
                 </button>
                 
                 <button class="nav-icon-btn" aria-label="User login">
@@ -63,10 +64,65 @@
     </nav>
    
   </header>
-  <main class="hero section">
-   
-        <p>Hello World</p>    
+  <main class="about-main">
+    <!-- About Banner Section -->
+    <section class="about-banner">
+      <div class="about-banner-overlay">
+        <div class="about-banner-content">
+          <h1 class="about-banner-title">About KickStart</h1>
+          <p class="about-banner-subtitle">Your Sport Journey Begins Here</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="about-story">
+      <div class="about-story-container">
+        <div class="about-story-content">
+          <h2 class="about-section-title">Our Story</h2>
+          <p class="about-section-text">KickStart began as a small idea between three fitness enthusiasts who wanted to make sports accessible to everyone. What started as a passion for helping friends find the best gear has grown into a platform that connects athletes worldwide with quality equipment and motivation.</p>
+        </div>
+        <div class="about-story-image">
+          <img src="images/about1.jpg" alt="Our Story" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Mission Section -->
+    <section class="about-mission">
+      <div class="about-mission-container">
+        <div class="about-mission-image">
+          <img src="images/about2.jpg" alt="Our Mission" />
+        </div>
+        <div class="about-mission-content">
+          <h2 class="about-section-title">Our Mission</h2>
+          <p class="about-section-text">At KickStart, our mission is to inspire every individual to embrace an active lifestyle. Whether you're a beginner or a pro athlete, we believe the right gear can spark your passion and push your limits.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Values Section -->
+    <section class="about-values">
+      <div class="about-values-container">
+        <h2 class="about-values-title">Our Values</h2>
+        <div class="values-grid">
+          <div class="value-box">
+            <h3 class="value-title">Performance</h3>
+            <p class="value-text">Every product is chosen to help you perform your best.</p>
+          </div>
+          <div class="value-box">
+            <h3 class="value-title">Passion</h3>
+            <p class="value-text">We live and breathe sports — it's more than a business, it's a lifestyle.</p>
+          </div>
+          <div class="value-box">
+            <h3 class="value-title">Community</h3>
+            <p class="value-text">We believe in supporting athletes and empowering local talents.</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
+
     
 
 
@@ -169,6 +225,44 @@
 
     <script src="js/light-mode-toggle.js"></script>
   <script src="js/main.js"></script>
+  
+  <!-- Cart functionality -->
+  <script>
+    // Cart functionality
+    class Cart {
+      constructor() {
+        this.items = this.loadFromStorage();
+        this.updateCartBadge();
+      }
+
+      loadFromStorage() {
+        const stored = localStorage.getItem('kickstart_cart');
+        return stored ? JSON.parse(stored) : [];
+      }
+
+      getTotalItems() {
+        return this.items.reduce((total, item) => total + item.quantity, 0);
+      }
+
+      updateCartBadge() {
+        const badge = document.getElementById('cart-badge');
+        if (badge) {
+          const count = this.getTotalItems();
+          badge.textContent = count;
+          badge.style.display = count > 0 ? 'block' : 'none';
+        }
+      }
+    }
+
+    // Initialize cart functionality
+    const cart = new Cart();
+
+    // Cart toggle functionality
+    const cartToggle = document.getElementById('cart-toggle');
+    cartToggle.addEventListener('click', () => {
+      window.location.href = 'cart.html';
+    });
+  </script>
   
   <!-- Footer Scroll to Top Script -->
   <script>
