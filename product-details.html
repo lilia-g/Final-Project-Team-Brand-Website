@@ -25,7 +25,7 @@
                 <a href="Products.html" class="nav-link">Product</a>
                 <a href="about.html" class="nav-link">About</a>
                 <a href="contact.html" class="nav-link">Contact</a>
-                <a href="get-started.html" class="nav-link nav-cta">Get Started</a>
+                <!-- <a href="get-started.html" class="nav-link nav-cta">Get Started</a> -->
             </div>
             
             <!-- Right Section with All 4 Icons -->
@@ -99,71 +99,70 @@
 
         <!-- Product Details Content -->
         <div id="productDetailsContent" class="product-details-content" style="display: none;">
-          <!-- Product Image -->
-          <div class="product-image-section">
-            <div class="product-main-image">
-              <img id="productMainImage" src="" alt="Product Image" />
-              <div class="product-tags">
-                <span id="productNewTag" class="product-tag new-tag" style="display: none;">NEW</span>
-                <span id="productDiscountTag" class="product-tag discount-tag" style="display: none;"></span>
+          <!-- Main Product Section -->
+          <div class="product-main-section">
+            <!-- Product Image -->
+            <div class="product-image-section">
+              <div class="product-main-image">
+                <img id="productMainImage" src="" alt="Product Image" />
+                <div class="product-tags">
+                  <span id="productNewTag" class="product-tag new-tag" style="display: none;">NEW</span>
+                  <span id="productDiscountTag" class="product-tag discount-tag" style="display: none;"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Information -->
+            <div class="product-info-section">
+              <div class="product-header">
+                <h1 id="productName" class="product-name"></h1>
+                <p id="productCategory" class="product-category"></p>
+              </div>
+
+              <div class="product-description">
+                <h3>Description</h3>
+                <p id="productDescription"></p>
+              </div>
+
+              <!-- Product Options -->
+              <div id="productOptionsSection" class="product-options-section" style="display: none;">
+                <h3>Options</h3>
+                <div id="productOptions" class="product-options"></div>
+              </div>
+
+              <!-- Quantity Selection -->
+              <div class="quantity-section">
+                <h3>Quantity</h3>
+                <div class="quantity-controls">
+                  <button class="quantity-btn" id="decreaseQuantity">-</button>
+                  <input type="number" id="quantityInput" value="1" min="1" max="99" class="quantity-input">
+                  <button class="quantity-btn" id="increaseQuantity">+</button>
+                </div>
+              </div>
+
+              <!-- Price Section -->
+              <div class="product-price-section">
+                <div id="productPrice" class="product-price"></div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="product-actions">
+                <button id="addToCartBtn" class="add-to-cart-btn">
+                  <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"/>
+                    <circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                  </svg>
+                  Add to Cart
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- Product Information -->
-          <div class="product-info-section">
-            <div class="product-header">
-              <h1 id="productName" class="product-name"></h1>
-              <p id="productCategory" class="product-category"></p>
-            </div>
-
-            <div class="product-price-section">
-              <div id="productPrice" class="product-price"></div>
-            </div>
-
-            <div class="product-description">
-              <h3>Description</h3>
-              <p id="productDescription"></p>
-            </div>
-
-            <!-- Product Options -->
-            <div id="productOptionsSection" class="product-options-section" style="display: none;">
-              <h3>Options</h3>
-              <div id="productOptions" class="product-options"></div>
-            </div>
-
-            <!-- Quantity Selection -->
-            <div class="quantity-section">
-              <h3>Quantity</h3>
-              <div class="quantity-controls">
-                <button class="quantity-btn" id="decreaseQuantity">-</button>
-                <input type="number" id="quantityInput" value="1" min="1" max="99" class="quantity-input">
-                <button class="quantity-btn" id="increaseQuantity">+</button>
-              </div>
-            </div>
-
-            <!-- Stock Information -->
-            <div class="stock-section">
-              <p id="stockInfo" class="stock-info"></p>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="product-actions">
-              <button id="addToCartBtn" class="add-to-cart-btn">
-                <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="9" cy="21" r="1"/>
-                  <circle cx="20" cy="21" r="1"/>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                </svg>
-                Add to Cart
-              </button>
-            </div>
-
-            <!-- Product Features -->
-            <div class="product-features">
-              <h3>Features</h3>
-              <ul id="productFeatures" class="features-list"></ul>
-            </div>
+          <!-- Product Features Section -->
+          <div class="product-features-section">
+            <h3 class="features-section-title">Product Features</h3>
+            <div id="productFeatures" class="features-grid"></div>
           </div>
         </div>
       </div>
@@ -472,20 +471,20 @@
       });
     }
 
-    // Update stock info
-    const totalStock = product.options ? 
-      product.options.reduce((total, opt) => total + opt.quantity, 0) : 
-      (product.stock || 0);
-    
-    document.getElementById('stockInfo').textContent = `${totalStock} items in stock`;
-
     // Update features
-    const featuresList = document.getElementById('productFeatures');
-    if (product.features && product.features.length > 0) {
-      featuresList.innerHTML = product.features.map(feature => `<li>${feature}</li>`).join('');
-    } else {
-      featuresList.innerHTML = '<li>High quality materials</li><li>Durable construction</li><li>Comfortable design</li>';
-    }
+    const featuresGrid = document.getElementById('productFeatures');
+    const features = product.features && product.features.length > 0 ? 
+      product.features : 
+      ['High quality materials', 'Durable construction', 'Comfortable design'];
+    
+    featuresGrid.innerHTML = features.map(feature => `
+      <div class="feature-box">
+        <div class="feature-icon">
+         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <h4 class="feature-title">${feature}</h4>
+      </div>
+    `).join('');
 
     // Setup quantity controls
     setupQuantityControls();
