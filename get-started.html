@@ -1,31 +1,401 @@
-<script>
-  // Improved Modal Script
-  document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('myModal');
-    const btn = document.getElementById('myBtn');
-    const span = document.getElementsByClassName('close')[0];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kickstart — Get Started</title>
 
-    btn.onclick = function() {
-      modal.style.display = 'block';
-    }
 
-    span.onclick = function() {
-      modal.style.display = 'none';
-    }
+  <link rel="shortcut icon" href="images/falcone.png" type="image/png">
 
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = 'none';
+
+  <!-- keep your existing theme and main styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+
+
+  <!-- page-specific styles (scoped, will not override global rules) -->
+  <link rel="stylesheet" href="css/get-started.css">
+</head>
+<body>
+  <!-- ========== HEADER (unchanged) ========== -->
+  <header>
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <a href="index.html" class="logo-text">Kickstart</a>
+        </div>
+
+
+        <div class="nav-menu" id="nav-menu">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="Products.html" class="nav-link">Product</a>
+          <a href="about.html" class="nav-link">About</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+          <a href="get-started.html" class="nav-link nav-cta">Get Started</a>
+        </div>
+
+
+        <div class="nav-actions">
+          <button class="nav-icon-btn" id="dark-mode-toggle" aria-label="Toggle dark mode">
+            <!-- theme icon svg -->
+            <svg class="nav-icon" id="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+          </button>
+
+
+          <button class="nav-icon-btn" id="cart-toggle" aria-label="Shopping cart">
+            <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <span class="cart-badge" id="cart-badge">0</span>
+          </button>
+
+
+          <button class="nav-icon-btn" aria-label="User login">
+            <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </button>
+
+
+          <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu">
+            <span class="hamburger"></span>
+            <span class="hamburger"></span>
+            <span class="hamburger"></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- ========== MAIN: Get Started (replaces Hello World) ========== -->
+  <main class="ks-hero section" id="ks-get-started">
+    <div class="ks-container">
+
+
+      <!-- hero left (text + actions) -->
+      <section class="ks-hero-left">
+        <span class="ks-badge">Get started • Discipline programs</span>
+        <h1 class="ks-title">Turn consistency into performance.<br /><span class="ks-accent">Choose your discipline. Start today.</span></h1>
+        <p class="ks-sub">Kickstart helps you pick a structured discipline program for any sport — with motivational quotes, inspiration visuals, and real user plans that worked. Start small, stay consistent, finish strong.</p>
+
+
+        <div class="ks-actions">
+          <button class="ks-btn ks-btn-primary" id="ks-open-modal">Create My Plan</button>
+          <a class="ks-btn ks-btn-ghost" href="#ks-previous">See success stories</a>
+        </div>
+
+
+        <div class="ks-quote-card">
+          <div class="ks-quote">"Discipline is choosing between what you want now and what you want most." — anonymous</div>
+        </div>
+      </section>
+
+
+      <!-- hero right (illustration / stats) -->
+      <aside class="ks-illu" aria-hidden="false">
+        <div class="ks-silo">
+          <div class="ks-runner" aria-hidden="true">
+            <!-- lightweight inline SVG illustration (no external asset required) -->
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+              <defs>
+                <linearGradient id="ks-grad" x1="0" x2="1">
+                  <stop offset="0" stop-color="#ff6a00"/>
+                  <stop offset="1" stop-color="#ffb37a"/>
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="78" fill="url(#ks-grad)" opacity="0.06"/>
+              <g transform="translate(18,20)">
+                <circle cx="70" cy="36" r="10" fill="#111" />
+                <rect x="60" y="46" width="20" height="34" rx="8" fill="#111" transform="rotate(-12 70 63)"/>
+                <path d="M65 80 L55 110" stroke="#111" stroke-width="6" stroke-linecap="round" />
+                <path d="M78 80 L92 110" stroke="#111" stroke-width="6" stroke-linecap="round" />
+                <path d="M130 24 q20 6 34 18" stroke="#ff6a00" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.45"/>
+              </g>
+            </svg>
+          </div>
+
+
+          <div class="ks-pulse">Start • 7 — 90 days</div>
+        </div>
+
+
+        <div class="ks-stats">
+          <div class="ks-stat">
+            <div class="ks-stat-number">+12%</div>
+            <div class="ks-stat-label">Avg. weekly progress</div>
+          </div>
+          <div class="ks-stat">
+            <div class="ks-stat-number">4K</div>
+            <div class="ks-stat-label">Plans started</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+
+    <!-- Inspiration -->
+    <section class="ks-inspiration">
+      <h2>Motivation & Inspiration</h2>
+      <p class="ks-muted">Curve your focus with visuals and quotes that push forward. Hover for micro-tips.</p>
+
+
+      <div class="ks-insp-grid">
+        <div class="ks-inspo" style="background-image:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)), url('images/inspo1.jpg')">
+          <h3>Morning Ritual</h3>
+          <p>20 min mobility • 10 min visualization</p>
+        </div>
+        <div class="ks-inspo" style="background-image:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)), url('images/inspo2.jpg')">
+          <h3>Micro-Progress</h3>
+          <p>Tracks small wins — repeat them.</p>
+        </div>
+        <div class="ks-inspo" style="background-image:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)), url('images/inspo3.jpg')">
+          <h3>Discipline & Routine</h3>
+          <p>Design systems, not moods.</p>
+        </div>
+        <div class="ks-inspo" style="background-image:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45)), url('images/inspo4.jpg')">
+          <h3>Community Push</h3>
+          <p>Small groups for accountability</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Sample Plans -->
+    <section class="ks-templates">
+      <h2>Sample Discipline Plans</h2>
+      <p class="ks-muted">Tried-and-true templates you can start from — tweak as you like.</p>
+
+
+      <div class="ks-plans">
+        <article class="ks-plan-card">
+          <div class="ks-meta">
+            <strong>Soccer — Build Endurance</strong>
+            <span class="ks-small">8 weeks</span>
+          </div>
+          <p class="ks-muted">3 sessions/week: intervals, technical work, recovery. Weekly mileage builds gradually.</p>
+          <div class="ks-plan-actions">
+            <button class="ks-btn ks-btn-primary" data-template-name="Soccer — Build Endurance" data-template-weeks="8">Use template</button>
+            <button class="ks-btn ks-btn-ghost" data-preview="Soccer — Build Endurance">Preview</button>
+          </div>
+        </article>
+
+
+        <article class="ks-plan-card">
+          <div class="ks-meta">
+            <strong>Basketball — Skill & Shot</strong>
+            <span class="ks-small">6 weeks</span>
+          </div>
+          <p class="ks-muted">Daily skill reps + 2 gym sessions for strength</p>
+          <div class="ks-plan-actions">
+            <button class="ks-btn ks-btn-primary" data-template-name="Basketball — Skill & Shot" data-template-weeks="6">Use template</button>
+            <button class="ks-btn ks-btn-ghost" data-preview="Basketball — Skill & Shot">Preview</button>
+          </div>
+        </article>
+
+
+        <article class="ks-plan-card">
+          <div class="ks-meta">
+            <strong>Running — 5K to 10K</strong>
+            <span class="ks-small">9 weeks</span>
+          </div>
+          <p class="ks-muted">Structured pacing system, one long-run & tempo sessions weekly.</p>
+          <div class="ks-plan-actions">
+            <button class="ks-btn ks-btn-primary" data-template-name="Running — 5K to 10K" data-template-weeks="9">Use template</button>
+            <button class="ks-btn ks-btn-ghost" data-preview="Running — 5K to 10K">Preview</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
+    <!-- Previous user plans -->
+    <section id="ks-previous" class="ks-previous">
+      <h2>Previous Plans (Real users)</h2>
+      <p class="ks-muted">Saved plans from you and other users — revisit, continue, or share them.</p>
+      <div id="ks-previous-list" class="ks-previous-list" aria-live="polite"></div>
+    </section>
+
+
+    <!-- Modal (plan builder) -->
+    <div id="ks-modal" class="ks-modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="ks-modal" role="document" aria-labelledby="ks-modalTitle">
+        <h3 id="ks-modalTitle">Create your discipline plan</h3>
+        <p class="ks-muted">Pick sport, level, and duration. We'll generate a starter plan you can save.</p>
+
+
+        <form id="ks-plan-form" class="ks-form">
+          <div class="ks-form-grid">
+            <div>
+              <label for="ks-sport">Discipline</label>
+              <select id="ks-sport" required>
+                <option value="Soccer">Soccer</option>
+                <option value="Basketball">Basketball</option>
+                <option value="Running">Running</option>
+                <option value="Swimming">Swimming</option>
+                <option value="Fitness">Fitness</option>
+                <option value="Custom">Custom</option>
+              </select>
+            </div>
+
+
+            <div>
+              <label for="ks-level">Level</label>
+              <select id="ks-level" required>
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+              </select>
+            </div>
+
+
+            <div>
+              <label for="ks-duration">Duration (weeks)</label>
+              <input id="ks-duration" type="number" min="1" max="52" value="8" required />
+            </div>
+
+
+            <div>
+              <label for="ks-focus">Primary Focus</label>
+              <select id="ks-focus" required>
+                <option>Endurance</option>
+                <option>Strength</option>
+                <option>Skill</option>
+                <option>Mobility</option>
+                <option>Recovery</option>
+              </select>
+            </div>
+          </div>
+
+
+          <div style="margin-top:12px">
+            <label for="ks-notes">Personal notes (optional)</label>
+            <textarea id="ks-notes" rows="3" placeholder="Injuries? preferences?"></textarea>
+          </div>
+
+
+          <div class="ks-modal-actions">
+            <button type="button" class="ks-btn ks-btn-ghost" id="ks-close-modal">Cancel</button>
+            <button type="submit" class="ks-btn ks-btn-primary" id="ks-generate-plan">Generate & Save</button>
+          </div>
+        </form>
+
+
+        <div id="ks-plan-preview" class="ks-plan-preview" aria-live="polite"></div>
+      </div>
+    </div>
+
+
+  </main>
+
+
+  <!-- ========== FOOTER (unchanged, keep your existing markup) ========== -->
+  <footer class="footer">
+    <!-- Your existing footer content should remain here (copied from project) -->
+    <div class="footer-main">
+      <div class="footer-container">
+        <div class="footer-section">
+          <div class="footer-logo"><a href="index.html" class="footer-logo-text">Kickstart</a></div>
+          <p class="footer-description">Move faster Train harder<br>Play smarter <strong>Kickstart</strong> your journey</p>
+        </div>
+
+
+        <div class="footer-section">
+          <h3 class="footer-title">Pages</h3>
+          <ul class="footer-links">
+            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="Products.html" class="footer-link">Products</a></li>
+            <li><a href="about.html" class="footer-link">About Us</a></li>
+            <li><a href="contact.html" class="footer-link">Contact</a></li>
+            <li><a href="get-started.html" class="footer-link">Get Started</a></li>
+          </ul>
+        </div>
+
+
+        <div class="footer-section">
+          <h3 class="footer-title">Useful Links</h3>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">Terms of Service</a></li>
+            <li><a href="#" class="footer-link">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+
+        <div class="footer-section">
+          <h3 class="footer-title">Contact Us</h3>
+          <div class="footer-social">
+            <!-- social icons kept as in original -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="footer-copyright">
+      <p class="copyright-text">© <span id="ks-year"></span> Kickstart. All rights reserved.</p>
+    </div>
+  </footer>
+
+
+  <!-- Back to Top (keeps your existing button) -->
+  <button id="back-to-top" class="back-to-top-btn" aria-label="Back to top" title="Back to top">
+    <svg class="back-to-top-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </button>
+
+
+  <!-- ========== SCRIPTS ========== -->
+  <!-- keep your site-wide scripts -->
+  <script src="js/light-mode-toggle.js"></script>
+  <script src="js/main.js"></script>
+
+
+  <!-- page-specific behaviour (namespaced) -->
+  <script src="js/get-started.js"></script>
+
+  <!-- Cart functionality -->
+  <script>
+    // Initialize cart functionality using global CartBadge class
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize cart badge
+      if (window.CartBadge) {
+        new window.CartBadge();
       }
-    }
-  });
-</script>
 
-<div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Your modal content goes here.</p>
-  </div>
-</div>
+      // Cart toggle functionality
+      const cartToggle = document.getElementById('cart-toggle');
+      if (cartToggle) {
+        cartToggle.addEventListener('click', () => {
+          window.location.href = 'cart.html';
+        });
+      }
+    });
+  </script>
 
-<button id="myBtn">Open Modal</button>
+  <!-- footer helpers still ok (scroll to top etc.) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('ks-year').textContent = new Date().getFullYear();
+      const footerLogo = document.querySelector('.footer-logo-text');
+      if (footerLogo) footerLogo.addEventListener('click', e => { e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); });
+      const backToTopBtn = document.getElementById('back-to-top');
+      if (backToTopBtn) backToTopBtn.addEventListener('click', e => { e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); });
+    });
+  </script>
+</body>
+</html>
+
+
+

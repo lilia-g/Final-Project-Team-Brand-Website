@@ -2843,10 +2843,16 @@ body.dark-mode .discount-preview {
 
 /* Product Details Content */
 .product-details-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-12);
-    align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.product-main-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+  align-items: start;
 }
 
 /* Product Image Section */
@@ -2890,6 +2896,7 @@ body.dark-mode .discount-preview {
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
+    padding-left: var(--space-6);
 }
 
 .product-header {
@@ -2915,12 +2922,14 @@ product-category {
 }
 
 /* Product Price Section */
-.product-price-section {
-    padding: var(--space-4);
+/* .product-price-section {
+    padding: var(--space-6);
     background: var(--bg-secondary);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-}
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--primary-orange);
+    margin: var(--space-4) 0;
+    box-shadow: 0 4px 12px rgba(255, 88, 0, 0.1);
+} */
 
 .product-price {
     display: flex;
@@ -3097,41 +3106,70 @@ product-category {
     height: 20px;
 }
 
-/* Product Features */
-.product-features h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--gray-800);
-    margin: 0 0 var(--space-3) 0;
+/* Product Features Section */
+.product-features-section {
+  margin-top: var(--space-8);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border-color);
 }
 
-.features-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+.features-section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-6) 0;
+  text-align: center;
 }
 
-.features-list li {
-    color: var(--gray-600);
-    padding: var(--space-2) 0;
-    border-bottom: 1px solid var(--border-color);
-    position: relative;
-    padding-left: var(--space-6);
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-6);
 }
 
-.features-list li:before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: var(--primary-orange);
-    font-weight: bold;
+.feature-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  text-align: center;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
 }
 
-.features-list li:last-child {
-    border-bottom: none;
+.feature-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px var(--shadow-color);
+  border-color: var(--primary-orange);
+}
+
+.feature-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--primary-orange);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  transition: all var(--transition-normal);
+}
+
+.feature-box:hover .feature-icon {
+  background: var(--primary-orange-dark);
+  transform: scale(1.1);
+}
+
+.feature-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.4;
 }
 
 /* Not Found State */
@@ -3274,6 +3312,28 @@ body.dark-mode .features-list li {
     border-color: var(--border-color);
 }
 
+body.dark-mode .product-features-section {
+  border-top-color: var(--border-color);
+}
+
+body.dark-mode .features-section-title {
+  color: var(--white);
+}
+
+body.dark-mode .feature-box {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+body.dark-mode .feature-box:hover {
+  border-color: var(--primary-orange);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .feature-title {
+  color: var(--white);
+}
+
 body.dark-mode .not-found-state h3 {
     color: var(--gray-200);
 }
@@ -3303,12 +3363,20 @@ body.dark-mode .not-found-state p {
     }
     
     .product-details-content {
+        gap: var(--space-6);
+    }
+    
+    .product-main-section {
         grid-template-columns: 1fr;
         gap: var(--space-6);
     }
     
     .product-image-section {
         position: static;
+    }
+    
+    .product-info-section {
+        padding-left: 0;
     }
     
     .product-name {
@@ -3325,6 +3393,15 @@ body.dark-mode .not-found-state p {
     
     .add-to-cart-btn {
         flex: none;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .feature-box {
+        padding: var(--space-4);
     }
 }
 
